@@ -1,4 +1,5 @@
-import { BaseEntity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn } from "typeorm";
+import BaseEntity from "../BaseEntity";
 
 export default class Account extends BaseEntity {
   @PrimaryGeneratedColumn()
