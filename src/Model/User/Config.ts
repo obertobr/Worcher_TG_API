@@ -1,41 +1,38 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../BaseEntity";
-
 export default class Config extends BaseEntity {
-    
-    @PrimaryGeneratedColumn()
-    @Column({name: 'id'})
-    private _id: number;
-    
-    @Column({name: 'reciveEmails'})
-    private _reciveEmails: boolean;
+  @PrimaryGeneratedColumn()
 
-    @Column({name: 'reciveNotifications'})
-    private _reciveNotifications: boolean;
+  @Column({name: 'id'})
+  private _id: number;
 
+  @Column({name: 'reciveEmails'})
+  private _reciveEmails: boolean;
 
-    get id() {
-       return this._id;
-    }
+  @Column({name: 'reciveNotifications'})
+  private _reciveNotifications: boolean;
 
-    set id(id: number){
-        this._id = id;
-    }
+  get id() {
+    return this._id;
+  }
 
-    get reciveEmails() {
-        return this._reciveEmails;
-     }
- 
-     set reciveEmails(reciveEmails: boolean){
-         this._reciveEmails = reciveEmails;
-     }
+  set id(id: number){
+    this._id = id;
+  }
 
-     get reciveNotifications() {
-        return this._reciveNotifications;
-     }
- 
-     set reciveNotifications(reciveNotifications: boolean){
-         this._reciveNotifications = reciveNotifications;
-     }
- 
+  get reciveEmails() {
+    return this._reciveEmails;
+  }
+
+  set reciveEmails(reciveEmails: boolean){
+    this._reciveEmails = reciveEmails;
+  }
+
+  get reciveNotifications() {
+    return this._reciveNotifications;
+  }
+
+  set reciveNotifications(reciveNotifications: boolean){
+    this._reciveNotifications = reciveNotifications;
+  }
 }
