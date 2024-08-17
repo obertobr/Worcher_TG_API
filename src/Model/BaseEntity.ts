@@ -4,6 +4,6 @@ import { Entity } from 'typeorm';
 @Entity()
 export default abstract class BaseEntity implements HasId {
     
-    abstract getId();
+    abstract get id();
 
 }

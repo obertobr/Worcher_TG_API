@@ -1,5 +1,5 @@
 export default interface HasId {
 
-    getId();
+    get id();
 
 }
