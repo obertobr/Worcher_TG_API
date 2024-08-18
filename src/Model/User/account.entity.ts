@@ -1,10 +1,10 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
-import BaseEntity from "../BaseEntity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import BaseEntity from "../baseEntity";
 
+@Entity()
 export default class Account extends BaseEntity {
-  @PrimaryGeneratedColumn()
-
-  @Column({name: 'id'})
+  
+  @PrimaryGeneratedColumn({name: 'id'})
   private _id: number;
 
   @Column({name: 'email'})
