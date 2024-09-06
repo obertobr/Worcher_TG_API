@@ -9,8 +9,8 @@ export default abstract class BaseCrudRepository<Entity> extends Repository<Enti
         return this.find()
     }
 
-    list(offset: number = null, maxResult: number = null){
-        return this.find(new OptionList(offset,maxResult))
+    list(optionList: OptionList){
+        return this.find(optionList)
     }
     
 }

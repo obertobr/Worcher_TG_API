@@ -24,4 +24,8 @@ export default class ErrorBuilder {
         throw new ValidationExcpection(this.errors,mainErrorMessage)
     }
 
+    public hasErrors(): boolean{
+       return (this.errors != null && this.errors.length >= 1); 
+    }
+
 }

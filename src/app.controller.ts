@@ -1,8 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { AppService } from './app.service';
 import ValidationExcpection from './Service/Validation/validation.exception';
-import ConfigCrudRepositoryInterface from './Repository/Interface/User/config.crud.repository.interface';
-import { ResponseInterceptor } from './Controller/response/response.interceptor';
+
 
 @Controller()
 export class AppController {

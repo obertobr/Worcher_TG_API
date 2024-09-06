@@ -1,3 +1,5 @@
+import OptionList from "../Utils/option.list"
+
 export default interface AbstractCrudRepositoryInterface<Entity> {
 
     save(entity: Entity): Promise<Entity>
@@ -6,7 +8,9 @@ export default interface AbstractCrudRepositoryInterface<Entity> {
 
     findOneById(id: number): Promise<Entity>
 
-    list(): Promise<Entity[]>
+    list(optionList: OptionList): Promise<Entity[]>
+
+    listAll(): Promise<Entity[]>
 
     remove(entity: Entity): Promise<Entity>
 

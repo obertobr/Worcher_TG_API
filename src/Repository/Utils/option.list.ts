@@ -2,9 +2,9 @@ import { FindManyOptions } from "typeorm/find-options/FindManyOptions";
 
 export default class OptionList implements FindManyOptions {
     
-    constructor(skip: number,take: number){
-        this.skip = skip
-        this.take = take
+    constructor(skip: number = 0,take: number = 50){
+        this.skip = skip ? skip : 0;
+        this.take = take ? skip : 50;
     }
 
     private _skip: number = 0;

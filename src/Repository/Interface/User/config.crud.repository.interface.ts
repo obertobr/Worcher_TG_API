@@ -3,6 +3,5 @@ import AbstractCrudRepositoryInterface from "../abstract.crud.repository.interfa
 
 export default interface ConfigCrudRepositoryInterface extends AbstractCrudRepositoryInterface<Config> {
 
-    getTeste();
     
 }

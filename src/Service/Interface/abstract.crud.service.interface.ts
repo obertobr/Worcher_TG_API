@@ -6,7 +6,7 @@ export default interface AbstractCrudServiceInterface<Entity> {
 
     findOneById(id: number): Promise<Entity>
 
-    list(): Promise<Entity[]>
+    list(offset?: number, maxResult?: number): Promise<Entity[]>
 
     remove(entity: Entity): Promise<Entity>
 
