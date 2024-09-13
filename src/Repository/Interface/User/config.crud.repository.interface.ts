@@ -1,7 +1,7 @@
 import Config from "src/Model/User/config.entity";
 import AbstractCrudRepositoryInterface from "../abstract.crud.repository.interface";
 
-export default interface ConfigCrudRepositoryInterface extends AbstractCrudRepositoryInterface<Config> {
+export default abstract class ConfigCrudRepositoryInterface extends AbstractCrudRepositoryInterface<Config> {
 
     
 }

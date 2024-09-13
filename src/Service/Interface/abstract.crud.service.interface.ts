@@ -1,14 +1,16 @@
-export default interface AbstractCrudServiceInterface<Entity> {
+export default abstract class AbstractCrudServiceInterface<T> {
 
-    save(entity: Entity): Promise<Entity>
+   abstract save(entity: T): Promise<T>
 
-    saveAll(entitys: Entity[]): Promise<Entity[]>
+   abstract saveAll(entitys: T[]): Promise<T[]>
 
-    findOneById(id: number): Promise<Entity>
+   abstract update(entity: T): Promise<T>;
 
-    list(offset?: number, maxResult?: number): Promise<Entity[]>
+   abstract getById(id: number): Promise<T>
 
-    remove(entity: Entity): Promise<Entity>
+   abstract list(offset?: number, maxResult?: number): Promise<T[]>
 
-    count(): Promise<number>
+   abstract delete(id: number): Promise<void>
+
+   abstract count(): Promise<number>
 }

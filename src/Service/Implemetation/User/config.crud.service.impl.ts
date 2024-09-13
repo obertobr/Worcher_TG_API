@@ -1,4 +1,3 @@
-import { Repository } from 'typeorm';
 import Config from "src/Model/User/config.entity";
 import { Inject, Injectable } from "@nestjs/common";
 import BaseCrudService from "../base.crud.service";
@@ -9,10 +8,9 @@ import ConfigCrudRepositoryInterface from 'src/Repository/Interface/User/config.
 @Injectable()
 export default class ConfigCrudServiceImpl extends BaseCrudService<Config> implements ConfigCrudServiceInterface {
     
-    constructor(@Inject('ConfigCrudRepositoryInterface') repository: ConfigCrudRepositoryInterface) {
+    constructor(@Inject(ConfigCrudRepositoryInterface) repository: ConfigCrudRepositoryInterface) {
         super(repository);
     }
-
 
     validate(entity: Config): ErrorBuilder {
         const errorBuilder = new ErrorBuilder()

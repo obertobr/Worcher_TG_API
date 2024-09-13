@@ -1,19 +1,19 @@
 import OptionList from "../Utils/option.list"
 
-export default interface AbstractCrudRepositoryInterface<Entity> {
+export default abstract class AbstractCrudRepositoryInterface<T> {
 
-    save(entity: Entity): Promise<Entity>
+   abstract save(entity: T | T[]): Promise<T | T[]>
 
-    save(entitys: Entity[]): Promise<Entity[]>
+   abstract update(id: number, partialEntity: Partial<T>): Promise<T>
 
-    findOneById(id: number): Promise<Entity>
+   abstract getById(id: number): Promise<T>
 
-    list(optionList: OptionList): Promise<Entity[]>
+   abstract list(optionList: OptionList): Promise<T[]>
 
-    listAll(): Promise<Entity[]>
+   abstract listAll(): Promise<T[]>
 
-    remove(entity: Entity): Promise<Entity>
+   abstract delete(id: number): Promise<void>
 
-    count(): Promise<number>
+   abstract count(): Promise<number>
 
 }

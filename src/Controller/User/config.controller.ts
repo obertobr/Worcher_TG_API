@@ -1,17 +1,42 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import Config from 'src/Model/User/config.entity';
 import ConfigCrudServiceInterface from 'src/Service/Interface/User/config.crud.service.interface';
 
 @Controller("/config")
 export class ConfigController {
-
   
-  constructor(@Inject('ConfigCrudServiceInterface') private readonly service: ConfigCrudServiceInterface) {}
+  constructor(@Inject(ConfigCrudServiceInterface) private readonly service: ConfigCrudServiceInterface) {}
+
+
+  @Get('/:id')
+  async getById(@Param('id') id: number): Promise<Config> {
+    return this.service.getById(id);
+  }
 
   @Get('/count')
   count(): Promise<number> {
-    console.log(this.service)
     return this.service.count();
   }
 
+  @Post()
+  async create(@Body() config: Config): Promise<Config> {
+    return this.service.save(config);
+  }
+
+
+  @Put()
+  async update(@Body() config: Config): Promise<Config> {
+    return this.service.update(config);
+  }
+
+  @Delete('/:id')
+  async delete(@Param('id') id: number): Promise<void> {
+    return this.service.delete(id);
+  }
+
+  @Get('/list')
+  async list(): Promise<Config[]> {
+    return this.service.list();
+  }
   
 }

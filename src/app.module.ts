@@ -6,10 +6,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { ValidationExceptionFilter } from './Service/Validation/validation.exception.filter';
 import { ResponseInterceptor } from './Controller/response/response.interceptor';
 import { ConfigController } from './Controller/User/config.controller';
-import ConfigCrudRepositoryImpl from './Repository/Implematation/User/config.crud.repository.impl';
-import ConfigCrudServiceImpl from './Service/Implemetation/User/config.crud.service.impl';
-import ConfigCrudRepositoryInterface from './Repository/Interface/User/config.crud.repository.interface';
-import ConfigCrudServiceInterface from './Service/Interface/User/config.crud.service.interface';
+import { ConfigServiceModule } from './Service/Implemetation/User/config.service.module';
 
 
 @Module({
@@ -24,6 +21,7 @@ import ConfigCrudServiceInterface from './Service/Interface/User/config.crud.ser
       entities: ['dist/**/*.entity.js'],
       synchronize: true, // NÃO USE EM PRODUÇÃO - sincroniza as entidades automaticamente
     }),
+    ConfigServiceModule,
   ],
   controllers: [AppController,ConfigController],
   providers: [
@@ -32,14 +30,6 @@ import ConfigCrudServiceInterface from './Service/Interface/User/config.crud.ser
       provide: APP_FILTER,
       useClass: ValidationExceptionFilter,
     },
-    {
-      provide: 'ConfigCrudRepositoryInterface',
-      useClass: ConfigCrudRepositoryImpl
-    },
-    {
-      provide: 'ConfigCrudServiceInterface',
-      useClass: ConfigCrudServiceImpl,
-    }
   ],
 })
 export class AppModule {

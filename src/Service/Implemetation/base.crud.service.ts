@@ -2,82 +2,93 @@ import AbstractCrudServiceInterface from "../Interface/abstract.crud.service.int
 import AbstractCrudRepositoryInterface from 'src/Repository/Interface/abstract.crud.repository.interface';
 import ErrorBuilder from '../Validation/error.builder';
 import OptionList from 'src/Repository/Utils/option.list';
+import ValidationExcpection from "../Validation/validation.exception";
 
-export default abstract class BaseCrudService<Entity> implements AbstractCrudServiceInterface<Entity>{
+export default abstract class BaseCrudService<T> implements AbstractCrudServiceInterface<T> {
     
-    private repository: AbstractCrudRepositoryInterface<Entity>;
+    private repository: AbstractCrudRepositoryInterface<T>;
 
-    constructor(repository: AbstractCrudRepositoryInterface<Entity>){
+    constructor(repository: AbstractCrudRepositoryInterface<T>) {
         this.repository = repository;
     }
 
-     protected beforeSave(entiy: Entity): void{
-        
-     }
+    protected beforeSave(entity: T): void { }
 
-    abstract validate(entity: Entity): ErrorBuilder
+    protected afterSave(entity: T): void { }
 
-    doSave(entity: Entity): Promise<Entity>{
-        return this.repository.save(entity)
-    }
+    protected beforeUpdate(entity: T): void {}
 
-    protected afterSave(entiy: Entity): void{
+    protected afterUpdate(entity: T): void {}
 
-    }
+    protected beforeRemove(entity: T): void { }
 
-    save(entity: Entity): Promise<Entity>{
+    protected afterRemove(entity: T): void { }
+
+    abstract validate(entity: T): ErrorBuilder
+
+    async save(entity: T): Promise<T> {
         this.beforeSave(entity)
 
         const errorBuilder = this.validate(entity)
-        let promise;
-
-        if(!errorBuilder.hasErrors()){
-             promise = this.doSave(entity);
-        }else{
+        if (!errorBuilder.hasErrors()) {
+            const savedEntity: T = await this.repository.save(entity).then()
+            this.afterSave(savedEntity)
+            return savedEntity
+        } else {
             errorBuilder.toThrowErrors()
         }
-
-        this.afterSave(entity);
-
-        return promise;
     }
 
-    // TODO - Repensar método, já que as entidades devem ser validadas antes de serem salvas
-    saveAll(entitys: Entity[]): Promise<Entity[]>{
-        return this.repository.save(entitys);
+    async saveAll(entities: T[]): Promise<T[]> {
+        entities.forEach(entity => {
+            this.beforeSave(entity)
+            const errorBuilder = this.validate(entity)
+            if (errorBuilder.hasErrors()) {
+                errorBuilder.toThrowErrors()
+            }
+        })
+        
+        const savedEntities: T[] = await this.repository.save(entities).then()
+        savedEntities.forEach(entity => this.afterSave(entity))
+        return savedEntities
     }
 
-    findOneById(id: number): Promise<Entity> {
-       return this.repository.findOneById(id);
+    async update(entity: T): Promise<T> {
+        this.beforeUpdate(entity);
+        const entityUpdated = await this.repository.update(entity['id'], entity);
+        
+        if (!entityUpdated) {
+            throw new ValidationExcpection([`Entity with ID ${entity['id']} not found`],'Erro ao atualizar objeto');
+        }
+        
+        this.afterUpdate(entityUpdated);
+        
+        return entity;
     }
 
-    list(offset?: number, maxResult?: number): Promise<Entity[]> {
-        if(offset && maxResult)
-            return this.repository.list(new OptionList(offset,maxResult))
+    async delete(id: number): Promise<void> {
+    
+        const entity = await this.repository.getById(id)
+        
+        if (!entity) {
+            throw new ValidationExcpection([`Entity with ID ${id} not found or already deleted`],'Erro ao deletar objeto');
+        }
+        
+        await this.repository.delete(id);
+    }
 
+    getById(id: number): Promise<T> {
+        return this.repository.getById(id)
+    }
+
+    list(offset?: number, maxResult?: number): Promise<T[]> {
+        if (offset && maxResult) {
+            return this.repository.list(new OptionList(offset, maxResult))
+        }
         return this.repository.listAll()
     }
 
-    protected beforeRemove(entiy: Entity): void{
-
-    }
-
-    protected afterRemove(Entity: Entity): void{
-
-    }
-
-    doRemove(entity: Entity): Promise<Entity>{
-        return this.repository.remove(entity)
-    }
-
-    remove(entity: Entity): Promise<Entity> {
-        this.beforeRemove(entity)
-        const promise = this.doSave(entity)
-        this.afterRemove(entity)
-        return promise
-    }
     count(): Promise<number> {
         return this.repository.count()
     }
-    
 }
