@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
+import User from "./user.entity";
 
 @Entity()
 export default class Config extends BaseEntity {
@@ -12,4 +13,7 @@ export default class Config extends BaseEntity {
 
   @Column({name: 'reciveNotifications', default: false})
   reciveNotifications: boolean;
+
+  @OneToOne(() => User, user => user.config)
+  user: User;
 }

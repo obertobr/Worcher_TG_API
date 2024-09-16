@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
+import User from "./user.entity";
 
 @Entity()
 export default class Account extends BaseEntity {
@@ -13,4 +14,6 @@ export default class Account extends BaseEntity {
   @Column({name: 'password'})
   password: string;
 
+  @OneToOne(() => User, user => user.account)
+  user: User;
 }

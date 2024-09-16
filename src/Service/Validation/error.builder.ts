@@ -10,8 +10,10 @@ export default class ErrorBuilder {
         return this._errors
     }
 
-    public addErrorMessage(messageError: string): void{
-        if(messageError != ""){
+    public addErrorMessage(messageError: string | string[]): void{
+        if(Array.isArray(messageError)){
+            this._errors = this._errors.concat(messageError)
+        } else if (messageError != ""){
             this._errors.push(messageError)
         }
     }
