@@ -13,7 +13,12 @@ export class ConfigController {
     return this.service.count();
   }
 
-  @Get('/:id')
+  @Get('/list')
+  async list(): Promise<Config[]> {
+    return this.service.list();
+  }
+
+  @Get('/id/:id')
   async getById(@Param('id') id: number): Promise<Config> {
     return this.service.getById(id);
   }
@@ -23,6 +28,10 @@ export class ConfigController {
     return this.service.save(config);
   }
 
+  @Post('/all')
+  async createAll(@Body() config: Config[]): Promise<Config[]> {
+    return this.service.saveAll(config);
+  }
 
   @Put()
   async update(@Body() config: Config): Promise<Config> {
@@ -32,11 +41,6 @@ export class ConfigController {
   @Delete('/:id')
   async delete(@Param('id') id: number): Promise<void> {
     return this.service.delete(id);
-  }
-
-  @Get('/list')
-  async list(): Promise<Config[]> {
-    return this.service.list();
   }
   
 }

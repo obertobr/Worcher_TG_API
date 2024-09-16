@@ -71,13 +71,17 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
         const entity = await this.repository.getById(id)
         
         if (!entity) {
-            throw new ValidationExcpection([`Entity with ID ${id} not found or already deleted`],'Erro ao deletar objeto');
+            throw new ValidationExcpection([`Entity with ID ${id} not found or already deleted`],'Error deleting object');
         }
         
         await this.repository.delete(id);
     }
 
-    getById(id: number): Promise<T> {
+    async getById(id: number): Promise<T> {
+        const entity = await this.repository.getById(id)
+        if (entity == null) {
+            throw new ValidationExcpection([`Entity with ID ${id} not found`],'Error getting object');
+        }
         return this.repository.getById(id)
     }
 
