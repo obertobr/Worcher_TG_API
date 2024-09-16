@@ -7,10 +7,10 @@ export default class Config extends BaseEntity {
   @PrimaryGeneratedColumn({name: 'id'})
   private _id: number;
 
-  @Column({name: 'reciveEmails'})
+  @Column({name: 'reciveEmails', default: false})
   private _reciveEmails: boolean;
 
-  @Column({name: 'reciveNotifications'})
+  @Column({name: 'reciveNotifications', default: false})
   private _reciveNotifications: boolean;
 
   get id() {

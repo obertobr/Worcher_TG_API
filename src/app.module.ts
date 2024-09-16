@@ -16,7 +16,7 @@ import { ConfigServiceModule } from './Service/Implemetation/User/config.service
       host: 'localhost',
       port: 3306, 
       username: 'root',
-      password: 'mysql',
+      password: '',
       database: 'worcher',
       entities: ['dist/**/*.entity.js'],
       synchronize: true, // NÃO USE EM PRODUÇÃO - sincroniza as entidades automaticamente
