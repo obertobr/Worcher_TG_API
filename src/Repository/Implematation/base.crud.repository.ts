@@ -17,7 +17,7 @@ export default abstract class BaseCrudRepository<T extends BaseEntity> implement
     }
 
     getById(id: number): Promise<T> {
-        return this.repository.findOne({ where: { id } as any })
+        return this.repository.findOneById(id)
     }
         
     count(): Promise<number> {
@@ -33,7 +33,7 @@ export default abstract class BaseCrudRepository<T extends BaseEntity> implement
     }
 
     update(id: number, partialEntity: Partial<T>): Promise<T> {
-        return this.repository.findOne({ where: { id } as any }).then(entity => {
+        return this.repository.findOneById(id).then(entity => {
             if (!entity) {
                return null
             }
