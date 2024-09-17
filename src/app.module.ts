@@ -6,7 +6,8 @@ import { APP_FILTER } from '@nestjs/core';
 import { ValidationExceptionFilter } from './Service/Validation/validation.exception.filter';
 import { ResponseInterceptor } from './Controller/response/response.interceptor';
 import { ConfigController } from './Controller/User/config.controller';
-import { ConfigServiceModule } from './Service/Implemetation/User/config.service.module';
+import { UserServiceModule } from './Service/Implemetation/User/user.service.module';
+import { UserController } from './Controller/User/user.controller';
 
 
 @Module({
@@ -21,9 +22,9 @@ import { ConfigServiceModule } from './Service/Implemetation/User/config.service
       entities: ['dist/**/*.entity.js'],
       synchronize: true, // NÃO USE EM PRODUÇÃO - sincroniza as entidades automaticamente
     }),
-    ConfigServiceModule,
+    UserServiceModule,
   ],
-  controllers: [AppController,ConfigController],
+  controllers: [AppController,ConfigController, UserController],
   providers: [
     AppService,
     {
