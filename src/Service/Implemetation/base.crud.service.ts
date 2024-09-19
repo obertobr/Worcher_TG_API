@@ -24,6 +24,9 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
 
     protected afterRemove(entity: T): void { }
 
+    protected async beforeInsert(entity: T): Promise<void> { }
+
+
     abstract validate(entity: T): ErrorBuilder
 
     async save(entity: T): Promise<T> {
@@ -31,6 +34,8 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
 
         const errorBuilder = this.validate(entity)
         if (!errorBuilder.hasErrors()) {
+            await this.beforeInsert(entity)
+
             const savedEntity: T = await this.repository.save(entity).then()
             this.afterSave(savedEntity)
             return savedEntity
@@ -40,12 +45,14 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     }
 
     async saveAll(entities: T[]): Promise<T[]> {
-        entities.forEach(entity => {
+        entities.forEach(async entity => {
             this.beforeSave(entity)
             const errorBuilder = this.validate(entity)
             if (errorBuilder.hasErrors()) {
                 errorBuilder.toThrowErrors()
             }
+
+            await this.beforeInsert(entity)
         })
         
         const savedEntities: T[] = await this.repository.save(entities).then()
@@ -55,6 +62,8 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
 
     async update(entity: T): Promise<T> {
         this.beforeUpdate(entity);
+        await this.beforeInsert(entity)
+
         const entityUpdated = await this.repository.update(entity['id'], entity);
         
         if (!entityUpdated) {

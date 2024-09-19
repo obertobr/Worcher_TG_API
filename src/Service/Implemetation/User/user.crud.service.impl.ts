@@ -7,6 +7,8 @@ import UserCrudRepositoryInterface from "src/Repository/Interface/User/user.crud
 import UserCrudServiceInterface from "src/Service/Interface/User/user.crud.service.interface";
 import AccountCrudServiceInterface from "src/Service/Interface/User/account.crud.service.interface";
 
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export default class UserCrudServiceImpl extends BaseCrudService<User> implements UserCrudServiceInterface {
 
@@ -22,7 +24,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         this.accountService = accountService;
     }
 
-    private isValidCPF(cpf) {
+    private isValidCPF(cpf: string) {
     
         // Verifica se o CPF tem 11 dígitos ou se é uma sequência de números repetidos
         if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
@@ -58,8 +60,20 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         return true;
     }
 
+    private hasMinimumAge(dateOfBirth: Date, minimumAge: number) {
+        const today = new Date();
+        const birthDate = new Date(dateOfBirth);
+
+        const minAgeDate = new Date(today.getFullYear() - minimumAge, today.getMonth(), today.getDate());
+        return birthDate <= minAgeDate;
+    }
+
     protected beforeSave(entity: User): void {
         entity.cpf = entity.cpf.replace(/[^\d]+/g, '');
+    }
+
+    protected async beforeInsert(entity: User): Promise<void> {
+        entity.account.password = await bcrypt.hash(entity.account.password, 10);
     }
 
     validate(entity: User): ErrorBuilder {
@@ -69,12 +83,14 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
             errorBuilder.addErrorMessage("Name is required")
         }
         if(entity.cpf == null){
-            errorBuilder.addErrorMessage("cpf is required")
+            errorBuilder.addErrorMessage("CPF is required")
         } else if(!this.isValidCPF(entity.cpf)){
-            errorBuilder.addErrorMessage("cpf is invalid")
+            errorBuilder.addErrorMessage("CPF is invalid")
         }
         if(entity.dateOfBirth == null){
             errorBuilder.addErrorMessage("Date of birth is required")
+        } else if(!this.hasMinimumAge(entity.dateOfBirth, 12)){
+            errorBuilder.addErrorMessage("Below the minimum age")
         }
 
         if(entity.config != null) {
