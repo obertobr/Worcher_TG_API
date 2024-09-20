@@ -1,0 +1,24 @@
+import { Inject, Injectable } from "@nestjs/common";
+import BaseCrudService from "../base.crud.service";
+import ErrorBuilder from "src/Service/Validation/error.builder";
+import Member from "src/Model/User/member.entity";
+import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
+import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
+
+@Injectable()
+export default class MemberCrudServiceImpl extends BaseCrudService<Member> implements MemberCrudServiceInterface {    
+    constructor(@Inject(MemberCrudRepositoryInterface) repository: MemberCrudRepositoryInterface) {
+        super(repository);
+    }
+   
+    validate(entity: Member): ErrorBuilder {
+        const errorBuilder = new ErrorBuilder()
+
+        if(entity.user == null){
+            errorBuilder.addErrorMessage("It is necessary to inform the user")
+        }
+
+        return errorBuilder;
+    }
+
+}

@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
-import Config from 'src/Model/User/config.entity';
 import User from 'src/Model/User/user.entity';
 import UserCrudServiceInterface from 'src/Service/Interface/User/user.crud.service.interface';
 

@@ -8,6 +8,7 @@ import { ResponseInterceptor } from './Controller/response/response.interceptor'
 import { ConfigController } from './Controller/User/config.controller';
 import { UserServiceModule } from './Service/Implemetation/User/user.service.module';
 import { UserController } from './Controller/User/user.controller';
+import { MemberController } from './Controller/User/member.controller';
 
 
 @Module({
@@ -24,7 +25,7 @@ import { UserController } from './Controller/User/user.controller';
     }),
     UserServiceModule,
   ],
-  controllers: [AppController,ConfigController, UserController],
+  controllers: [AppController,ConfigController, UserController, MemberController],
   providers: [
     AppService,
     {
