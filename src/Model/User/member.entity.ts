@@ -8,6 +8,6 @@ export default class Member extends BaseEntity {
   @PrimaryGeneratedColumn({name: 'id'})
   id: number;
 
-  @ManyToOne(() => User, user => user.member, {nullable: false})
+  @ManyToOne(() => User, user => user.memberList, {nullable: false})
   user: User;
 }

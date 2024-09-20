@@ -29,5 +29,5 @@ export default class User extends BaseEntity {
 
   @OneToMany(() => Member, member => member.user, { cascade: true, eager: true })
   @JoinColumn()
-  member: Member;
+  memberList: Member[];
 }
