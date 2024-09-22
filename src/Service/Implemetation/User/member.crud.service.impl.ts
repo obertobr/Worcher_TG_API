@@ -11,7 +11,7 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
         super(repository);
     }
    
-    validate(entity: Member): ErrorBuilder {
+    async validate(entity: Member): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
         if(entity.user == null){

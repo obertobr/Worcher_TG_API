@@ -10,6 +10,7 @@ import { UserController } from './Controller/User/user.controller';
 import { MemberController } from './Controller/User/member.controller';
 import { EventCategoryController } from './Controller/Event/event.category.controller';
 import { EventServiceModule } from './Service/Implemetation/Event/event.service.module';
+import { EventController } from './Controller/Event/event.controller';
 
 @Module({
   imports: [
@@ -26,7 +27,12 @@ import { EventServiceModule } from './Service/Implemetation/Event/event.service.
     UserServiceModule,
     EventServiceModule,
   ],
-  controllers: [AppController,ConfigController, UserController, MemberController, EventCategoryController],
+  controllers: [AppController,
+                ConfigController, 
+                UserController, 
+                MemberController, 
+                EventCategoryController, 
+                EventController],
   providers: [
     AppService,
     {

@@ -12,7 +12,7 @@ export default class ConfigCrudServiceImpl extends BaseCrudService<Config> imple
         super(repository);
     }
 
-    validate(entity: Config): ErrorBuilder {
+    async validate(entity: Config): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
         if(entity.reciveEmails == null){

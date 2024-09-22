@@ -76,7 +76,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         entity.account.password = await bcrypt.hash(entity.account.password, 10);
     }
 
-    validate(entity: User): ErrorBuilder {
+   async validate(entity: User): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){
@@ -94,7 +94,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         }
 
         if(entity.config != null) {
-            const configErrors : string[] = this.configService.validate(entity.config).errors
+            const configErrors : string[] = await this.configService.validate(entity.config).then( e => e.errors)
             if(configErrors && configErrors.length > 0) {
                 errorBuilder.addErrorMessage(configErrors)
             }
@@ -103,7 +103,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         }
 
         if(entity.account != null) {
-            const accountErrors : string[] = this.accountService.validate(entity.account).errors
+            const accountErrors : string[] = await this.accountService.validate(entity.account).then( e => e.errors)
             if(accountErrors && accountErrors.length > 0) {
                 errorBuilder.addErrorMessage(accountErrors)
             }
@@ -111,6 +111,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
             errorBuilder.addErrorMessage("Account is required")
         }
 
+        console.log(entity)
         return errorBuilder;
     }
    

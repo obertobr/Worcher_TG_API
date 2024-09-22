@@ -13,19 +13,5 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  @Get("/error")
-  getError(){
-    throw new ValidationExcpection(["Erro 1"]);
-  }
-
-  @Get("/acerto")
-  getAcerto(){
-    return {msg: "teste legal"}
-  }
-
-  @Get('/object')
-  getObject(){
-    //this.configCrudRepository.getTeste();
-  }
+  
 }

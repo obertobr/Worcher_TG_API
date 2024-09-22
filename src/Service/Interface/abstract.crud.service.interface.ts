@@ -2,7 +2,7 @@ import ErrorBuilder from "../Validation/error.builder";
 
 export default abstract class AbstractCrudServiceInterface<T> {
 
-   abstract validate(entity: T): ErrorBuilder
+   abstract validate(entity: T): Promise<ErrorBuilder>
    
    abstract save(entity: T): Promise<T>
 
