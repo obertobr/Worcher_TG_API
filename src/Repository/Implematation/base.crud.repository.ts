@@ -16,8 +16,11 @@ export default abstract class BaseCrudRepository<T extends BaseEntity> implement
         }
     }
 
-    getById(id: number): Promise<T> {
-        return this.repository.findOneById(id)
+    getById(id: number, relations? : string[]): Promise<T> {
+        return this.repository.findOne({
+            where: {id: id as any},
+            relations: relations || []
+        })
     }
         
     count(): Promise<number> {

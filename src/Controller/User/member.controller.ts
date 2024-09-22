@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs
 import Member from 'src/Model/User/member.entity';
 import User from 'src/Model/User/user.entity';
 import MemberCrudServiceInterface from 'src/Service/Interface/User/member.crud.service.interface';
-import { Entity } from 'typeorm';
+import { FindOptionsRelationByString } from 'typeorm';
 
 @Controller("/member")
 export class MemberController {
@@ -21,13 +21,8 @@ export class MemberController {
   }
 
   @Get('/id/:id')
-  async getById(@Param('id') id: number): Promise<Member> {
-    return this.service.getById(id);
-  }
-
-  @Get('/id/:id/user')
-  async getUser(@Param('id') id: number): Promise<User> {
-    return (await this.service.getById(id)).user;
+  async getById(@Param('id') id: number, @Body() relations: FindOptionsRelationByString): Promise<Member> {
+    return this.service.getById(id, relations);
   }
 
   @Post()

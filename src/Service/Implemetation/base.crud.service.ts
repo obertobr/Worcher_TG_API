@@ -86,12 +86,12 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
         await this.repository.delete(id);
     }
 
-    async getById(id: number): Promise<T> {
+    async getById(id: number, relations? : string[]): Promise<T> {
         const entity = await this.repository.getById(id)
         if (entity == null) {
             throw new ValidationExcpection([`Entity with ID ${id} not found`],'Error getting object');
         }
-        return this.repository.getById(id)
+        return this.repository.getById(id, relations)
     }
 
     list(offset?: number, maxResult?: number): Promise<T[]> {

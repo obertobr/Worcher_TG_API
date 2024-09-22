@@ -10,7 +10,7 @@ export default abstract class AbstractCrudServiceInterface<T> {
 
    abstract update(entity: T): Promise<T>;
 
-   abstract getById(id: number): Promise<T>
+   abstract getById(id: number, relations? : string[]): Promise<T>
 
    abstract list(offset?: number, maxResult?: number): Promise<T[]>
 

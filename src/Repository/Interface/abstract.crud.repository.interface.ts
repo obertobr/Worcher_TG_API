@@ -6,7 +6,7 @@ export default abstract class AbstractCrudRepositoryInterface<T> {
 
    abstract update(id: number, partialEntity: Partial<T>): Promise<T>
 
-   abstract getById(id: number): Promise<T>
+   abstract getById(id: number, relations? : string[]): Promise<T>
 
    abstract list(optionList: OptionList): Promise<T[]>
 
