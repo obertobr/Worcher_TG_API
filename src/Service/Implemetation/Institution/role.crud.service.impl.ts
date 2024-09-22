@@ -13,7 +13,7 @@ export default class RoleCrudServiceImpl extends BaseCrudService<Role> implement
         super(repository);
     }
 
-    validate(entity: Role): ErrorBuilder {
+    async validate(entity: Role): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){

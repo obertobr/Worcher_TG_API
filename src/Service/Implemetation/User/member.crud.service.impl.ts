@@ -4,20 +4,22 @@ import ErrorBuilder from "src/Service/Validation/error.builder";
 import Member from "src/Model/User/member.entity";
 import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
 import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
-import Role from "src/Model/Institution/role.entity";
-import RoleCrudRepositoryImpl from "src/Repository/Implematation/Institution/role.crud.repository.impl";
-import RoleCrudRepositoryInterface from "src/Repository/Interface/Institution/role.crud.repository.interface";
+import RoleCrudServiceInterface from "src/Service/Interface/Institution/role.crud.service.interface";
+import UserCrudServiceInterface from "src/Service/Interface/User/user.crud.service.interface";
 
 @Injectable()
 export default class MemberCrudServiceImpl extends BaseCrudService<Member> implements MemberCrudServiceInterface {   
     
-    private roleRepository: RoleCrudRepositoryInterface 
+    private serviceRole: RoleCrudServiceInterface;
+    private serviceUser: UserCrudServiceInterface;
     
     constructor(@Inject(MemberCrudRepositoryInterface) repository: MemberCrudRepositoryInterface,
-                @Inject(RoleCrudRepositoryInterface) roleRepository: RoleCrudRepositoryInterface
+                @Inject(RoleCrudServiceInterface) serviceRole: RoleCrudServiceInterface,
+                @Inject(UserCrudServiceInterface) serviceUser: UserCrudServiceInterface
 ) {
         super(repository);
-        this.roleRepository = roleRepository;
+        this.serviceRole = serviceRole;
+        this.serviceUser = serviceUser;
     }
    
     async validate(entity: Member): Promise<ErrorBuilder> {
@@ -25,7 +27,16 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
 
         if(entity.user == null){
             errorBuilder.addErrorMessage("It is necessary to inform the user")
+        } else if(await this.serviceUser.getById(entity.user.id) == null){
+            errorBuilder.addErrorMessage("User does not exist")
         }
+
+        if(entity.role == null){
+            errorBuilder.addErrorMessage("It is necessary to inform the role")
+        } else if(await this.serviceRole.getById(entity.role.id) == null){
+            errorBuilder.addErrorMessage("Role does not exist")
+        }
+
         return errorBuilder;
     }
 

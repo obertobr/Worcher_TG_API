@@ -8,10 +8,10 @@ import AccountCrudServiceImpl from "./account.crud.service.impl";
 import UserCrudServiceInterface from "src/Service/Interface/User/user.crud.service.interface";
 import MemberCrudServiceImpl from "./member.crud.service.impl";
 import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
-import { InstitutionRepositoryModule } from "src/Repository/Implematation/Institution/institution.repository.module";
+import { InstitutionServiceModule } from "../Institution/institution.service.module";
 
 @Module({
-    imports: [UserRepositoryModule, InstitutionRepositoryModule],
+    imports: [UserRepositoryModule, InstitutionServiceModule],
     providers: [
           {
             provide: UserCrudServiceInterface,
