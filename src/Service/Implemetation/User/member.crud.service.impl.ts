@@ -20,7 +20,7 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
         this.roleRepository = roleRepository;
     }
    
-    validate(entity: Member): ErrorBuilder {
+    async validate(entity: Member): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
         if(entity.user == null){

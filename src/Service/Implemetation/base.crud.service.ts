@@ -27,12 +27,12 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     protected async beforeInsert(entity: T): Promise<void> { }
 
 
-    abstract validate(entity: T): ErrorBuilder
+    abstract validate(entity: T): Promise<ErrorBuilder>
 
     async save(entity: T): Promise<T> {
         this.beforeSave(entity)
 
-        const errorBuilder = this.validate(entity)
+        const errorBuilder = await this.validate(entity);
         if (!errorBuilder.hasErrors()) {
             await this.beforeInsert(entity)
 
@@ -47,7 +47,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     async saveAll(entities: T[]): Promise<T[]> {
         entities.forEach(async entity => {
             this.beforeSave(entity)
-            const errorBuilder = this.validate(entity)
+            const errorBuilder = await this.validate(entity)
             if (errorBuilder.hasErrors()) {
                 errorBuilder.toThrowErrors()
             }

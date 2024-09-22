@@ -22,7 +22,7 @@ export default class AccountCrudServiceImpl extends BaseCrudService<Account> imp
         return regex.test(password);
     }
 
-    validate(entity: Account): ErrorBuilder {
+    async validate(entity: Account): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
         if(entity.email == null){

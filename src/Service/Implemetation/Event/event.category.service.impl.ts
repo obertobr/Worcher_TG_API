@@ -12,7 +12,7 @@ export default class EventCategoryCrudServiceImpl extends BaseCrudService<EventC
         super(repository);
     }
 
-    validate(entity: EventCategory): ErrorBuilder {
+    async validate(entity: EventCategory): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){

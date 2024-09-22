@@ -1,7 +1,8 @@
-import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
 import User from "./user.entity";
 import Role from "../Institution/role.entity";
+import Event from "../Event/event.entity";
 
 @Entity()
 export default class Member extends BaseEntity {
@@ -14,4 +15,11 @@ export default class Member extends BaseEntity {
 
   @ManyToOne(() => Role, role => role.memberList, {eager: true, nullable: false})
   role: Role;
+  
+  @OneToMany(() => Event, event => event.member, { cascade: true ,eager: true } )
+  createdEventList: Event[];
+
+  @ManyToMany(() => Event, event => event.registeredMemberList)
+  particepatedEventList: Event[];
+
 }

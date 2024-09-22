@@ -1,0 +1,6 @@
+import Event from "src/Model/Event/event.entity";
+import AbstractCrudRepositoryInterface from "../abstract.crud.repository.interface";
+
+export default abstract class EventCrudRepositoryInterface extends AbstractCrudRepositoryInterface<Event> {
+
+}
