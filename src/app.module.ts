@@ -13,6 +13,7 @@ import { EventServiceModule } from './Service/Implemetation/Event/event.service.
 import { RoleController } from './Controller/Institution/role.controller';
 import { InstitutionServiceModule } from './Service/Implemetation/Institution/institution.service.module';
 import { EventController } from './Controller/Event/event.controller';
+import { PermissionController } from './Controller/Institution/permission.controller';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { EventController } from './Controller/Event/event.controller';
                 MemberController, 
                 EventCategoryController, 
                 EventController,
-                RoleController],
+                RoleController,
+                PermissionController],
   providers: [
     AppService,
     {
