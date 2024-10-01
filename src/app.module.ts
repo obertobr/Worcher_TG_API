@@ -14,6 +14,8 @@ import { RoleController } from './Controller/Institution/role.controller';
 import { InstitutionServiceModule } from './Service/Implemetation/Institution/institution.service.module';
 import { EventController } from './Controller/Event/event.controller';
 import { PermissionController } from './Controller/Institution/permission.controller';
+import { StateController } from './Controller/Address/state.controller';
+import { AddressServiceModule } from './Service/Implemetation/Address/address.service.module';
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { PermissionController } from './Controller/Institution/permission.contro
     UserServiceModule,
     EventServiceModule,
     InstitutionServiceModule,
+    AddressServiceModule
   ],
   controllers: [AppController,
                 ConfigController, 
@@ -38,7 +41,8 @@ import { PermissionController } from './Controller/Institution/permission.contro
                 EventCategoryController, 
                 EventController,
                 RoleController,
-                PermissionController],
+                PermissionController,
+                StateController],
   providers: [
     AppService,
     {
