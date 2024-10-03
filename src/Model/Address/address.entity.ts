@@ -19,7 +19,7 @@ export default class Address extends BaseEntity {
   @Column({name: 'cep', nullable: false})
   cep: string;
 
-  @ManyToOne(() => City, city => city.addressList, { cascade: true, eager:false})
+  @ManyToOne(() => City, city => city.addressList, { cascade: true, eager:true})
   city: City;
 
 

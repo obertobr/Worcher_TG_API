@@ -1,6 +1,6 @@
-import City from "src/Model/Address/city.entity";
+import Address from "src/Model/Address/address.entity";
 import AbstractCrudServiceInterface from "../abstract.crud.service.interface";
 
-export default abstract class CityCrudServiceInterface extends AbstractCrudServiceInterface<City> {
+export default abstract class AddressCrudServiceInterface extends AbstractCrudServiceInterface<Address> {
     
 }
