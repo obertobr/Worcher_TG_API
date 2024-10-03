@@ -17,6 +17,7 @@ import { PermissionController } from './Controller/Institution/permission.contro
 import { StateController } from './Controller/Address/state.controller';
 import { AddressServiceModule } from './Service/Implemetation/Address/address.service.module';
 import { CityController } from './Controller/Address/city.controller';
+import { AdressController } from './Controller/Address/address.controller';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { CityController } from './Controller/Address/city.controller';
                 RoleController,
                 PermissionController,
                 StateController,
-                CityController],
+                CityController,
+                AdressController],
   providers: [
     AppService,
     {

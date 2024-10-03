@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
 import State from "./state.entity";
+import Address from "./address.entity";
 @Entity()
 export default class City extends BaseEntity {
   
@@ -12,5 +13,8 @@ export default class City extends BaseEntity {
 
   @ManyToOne(() => State, state => state.citiesList)
   state: State;
+
+  @OneToMany(() => Address, address => address.city)
+  addressList: Address[];
 
 }

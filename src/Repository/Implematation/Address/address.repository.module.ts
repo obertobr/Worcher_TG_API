@@ -6,9 +6,12 @@ import StateCrudRepositoryInterface from "src/Repository/Interface/Address/state
 import City from "src/Model/Address/city.entity";
 import CityCrudRepositoryInterface from "src/Repository/Interface/Address/city.crud.repository.interface";
 import CityCrudRepositoryImpl from "./city.crud.repository.impl";
+import Address from "src/Model/Address/address.entity";
+import AddressCrudRepositoryInterface from "src/Repository/Interface/Address/address.crud.repository.interface";
+import AddressCrudRepositoryImpl from "./address.crud.repository.impl";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([State,City])],
+    imports: [TypeOrmModule.forFeature([State,City,Address])],
     providers: [
           {
             provide: StateCrudRepositoryInterface,
@@ -17,8 +20,12 @@ import CityCrudRepositoryImpl from "./city.crud.repository.impl";
           {
             provide: CityCrudRepositoryInterface,
             useClass: CityCrudRepositoryImpl,
+          },
+          {
+            provide: AddressCrudRepositoryInterface,
+            useClass: AddressCrudRepositoryImpl,
           }
     ],
-    exports: [StateCrudRepositoryInterface,CityCrudRepositoryInterface]
+    exports: [StateCrudRepositoryInterface,CityCrudRepositoryInterface,AddressCrudRepositoryInterface]
 })
 export class AddressRepositoryModule{}

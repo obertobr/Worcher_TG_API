@@ -17,6 +17,9 @@ export default class CityCrudServiceImpl extends BaseCrudService<City> implement
         if(entity.name == null){
             errorBuilder.addErrorMessage("Name is required")
         }
+        if(entity.state == null){
+            errorBuilder.addErrorMessage("state Name is required")
+        }
 
         return errorBuilder;
     }
