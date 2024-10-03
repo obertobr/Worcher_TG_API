@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
+import City from "./city.entity";
 @Entity()
 export default class State extends BaseEntity {
   
@@ -11,4 +12,9 @@ export default class State extends BaseEntity {
 
   @Column({name: 'uf', nullable: false})
   uf: string;
+
+  @OneToMany(() => City, city => city.state, { cascade: true })
+  citiesList: City[];
+
+
 }

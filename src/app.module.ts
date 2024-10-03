@@ -16,6 +16,7 @@ import { EventController } from './Controller/Event/event.controller';
 import { PermissionController } from './Controller/Institution/permission.controller';
 import { StateController } from './Controller/Address/state.controller';
 import { AddressServiceModule } from './Service/Implemetation/Address/address.service.module';
+import { CityController } from './Controller/Address/city.controller';
 
 @Module({
   imports: [
@@ -42,7 +43,8 @@ import { AddressServiceModule } from './Service/Implemetation/Address/address.se
                 EventController,
                 RoleController,
                 PermissionController,
-                StateController],
+                StateController,
+                CityController],
   providers: [
     AppService,
     {

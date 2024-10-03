@@ -14,7 +14,6 @@ export default class StateCrudServiceImpl extends BaseCrudService<State> impleme
 
     async validate(entity: State): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
-
         if(entity.name == null){
             errorBuilder.addErrorMessage("Name is required")
         }
