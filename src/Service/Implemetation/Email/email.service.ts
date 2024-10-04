@@ -19,14 +19,28 @@ export class EmailService {
     }
 
     async sendEmail(to: string, subject: string, text: string, html: string) {
-        const mailOptions = {
-            from: '"Nome do Remetente" <oficialWorcher@gmail.com>',
-            to,
-            subject,
-            text,
-            html,
-        };
-        console.log(await this.transporter.sendMail(mailOptions));
-        return
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        try{
+            const mailOptions = {
+                from: '"Nome do Remetente" <oficialWorcher@gmail.com>',
+                to,
+                subject,
+                text,
+                html,
+            };
+            if(to.length <=0 || subject.length <=0 || text.length <=0 || html.length <=0){
+                return {message:'error sending the email cannot send email with empty fields'}
+            }else{
+                if(!regex.test(to)){
+                    return {message:'invalid email'}
+                }
+                return this.transporter.sendMail(mailOptions);
+            }
+        }catch(err){
+            return {message:'error sending the email ',err}
+        }
+        
+        
     }
 }
