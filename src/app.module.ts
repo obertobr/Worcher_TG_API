@@ -18,6 +18,8 @@ import { StateController } from './Controller/Address/state.controller';
 import { AddressServiceModule } from './Service/Implemetation/Address/address.service.module';
 import { CityController } from './Controller/Address/city.controller';
 import { AdressController } from './Controller/Address/address.controller';
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
   imports: [
