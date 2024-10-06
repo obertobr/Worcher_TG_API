@@ -14,9 +14,13 @@ export default class ConfigCrudServiceImpl extends BaseCrudService<Config> imple
 
     async validate(entity: Config): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
-
-        if(entity.reciveEmails == null){
+        
+        if(entity.recieveEmails == null){
             errorBuilder.addErrorMessage("Não é possível criar uma configuração sem identificar se o usuario quer receber emails")
+        }
+
+        if(entity.recieveNotifications == null){
+            errorBuilder.addErrorMessage("Não é possível criar uma configuração sem identificar se o usuario quer receber notificações")
         }
 
         return errorBuilder;
