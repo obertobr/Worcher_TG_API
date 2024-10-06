@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import { promises } from 'fs';
 import User from 'src/Model/User/user.entity';
 import UserCrudServiceInterface from 'src/Service/Interface/User/user.crud.service.interface';
 
@@ -42,5 +43,12 @@ export class UserController {
   async delete(@Param('id') id: number): Promise<void> {
     return this.service.delete(id);
   }
+
+  @Post('/recovery_password')
+  async recoveryPassword(@Body() object : {id:number}):Promise<void>{
+      
+      return this.service.recoveryPassword(object.id);
+  }
+
   
 }

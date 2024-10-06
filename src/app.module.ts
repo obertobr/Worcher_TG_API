@@ -36,7 +36,7 @@ import { ConfigModule } from '@nestjs/config';
     UserServiceModule,
     EventServiceModule,
     InstitutionServiceModule,
-    AddressServiceModule
+    AddressServiceModule,
   ],
   controllers: [AppController,
                 ConfigController, 

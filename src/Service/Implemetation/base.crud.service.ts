@@ -27,6 +27,8 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     protected async beforeInsert(entity: T): Promise<void> { }
 
 
+    
+
     abstract validate(entity: T): Promise<ErrorBuilder>
 
     async save(entity: T): Promise<T> {

@@ -13,7 +13,7 @@ export class EmailService {
             secure: false, // true para 465, false para outras portas
             auth: {
                 user: 'oficialWorcher@gmail.com', // Seu e-mail
-                pass: process.env.EMAIL_PASSWORD , // Sua senha
+                pass: process.env.EMAIL_PASSWORD, // Sua senha
             },
         });
     }

@@ -10,6 +10,7 @@ import MemberCrudServiceImpl from "./member.crud.service.impl";
 import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
 import { InstitutionServiceModule } from "../Institution/institution.service.module";
 
+
 @Module({
     imports: [UserRepositoryModule, InstitutionServiceModule],
     providers: [

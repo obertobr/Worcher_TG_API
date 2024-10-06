@@ -6,18 +6,22 @@ import User from "src/Model/User/user.entity";
 import UserCrudRepositoryInterface from "src/Repository/Interface/User/user.crud.repository.interface";
 import UserCrudServiceInterface from "src/Service/Interface/User/user.crud.service.interface";
 import AccountCrudServiceInterface from "src/Service/Interface/User/account.crud.service.interface";
+import { EmailService } from "../Email/email.service";
+
 
 import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export default class UserCrudServiceImpl extends BaseCrudService<User> implements UserCrudServiceInterface {
 
     private configService: ConfigCrudServiceInterface
     private accountService: AccountCrudServiceInterface
-    
+    private emailService = new EmailService()
     constructor(@Inject(UserCrudRepositoryInterface) repository: UserCrudRepositoryInterface,
                 @Inject(ConfigCrudServiceInterface) configService: ConfigCrudServiceInterface,
-                @Inject(AccountCrudServiceInterface) accountService: AccountCrudServiceInterface
+                @Inject(AccountCrudServiceInterface) accountService: AccountCrudServiceInterface,
+                
     ) {
         super(repository);
         this.configService = configService;
@@ -114,6 +118,16 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         console.log(entity)
         return errorBuilder;
     }
-   
+    async recoveryPassword(id:number):Promise<void>{
+
+        const user =await this.getById(id)
+        const codigo = Math.floor(100000+Math.random()*900000)
+        const email = this.emailService
+        await email.sendEmail(user.account.email,"password recovery","your password",`<p>${codigo}<p>`)
+        
+
+        
+        return 
+    }
 
 }
