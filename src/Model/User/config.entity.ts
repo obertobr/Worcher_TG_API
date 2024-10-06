@@ -8,11 +8,11 @@ export default class Config extends BaseEntity {
   @PrimaryGeneratedColumn({name: 'id'})
   id: number;
 
-  @Column({name: 'reciveEmails', default: false})
-  reciveEmails: boolean;
+  @Column({name: 'recieveEmails', default: false})
+  recieveEmails: boolean;
 
-  @Column({name: 'reciveNotifications', default: false})
-  reciveNotifications: boolean;
+  @Column({name: 'recieveNotifications', default: false})
+  recieveNotifications: boolean;
 
   @OneToOne(() => User, user => user.config)
   user: User;
