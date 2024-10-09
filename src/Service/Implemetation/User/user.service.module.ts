@@ -9,10 +9,13 @@ import UserCrudServiceInterface from "src/Service/Interface/User/user.crud.servi
 import MemberCrudServiceImpl from "./member.crud.service.impl";
 import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
 import { InstitutionServiceModule } from "../Institution/institution.service.module";
+import RecoveryCrudServiceInterface from "src/Service/Interface/Recovery/recovery.crud.service.interface";
+import RecoveryCrudServiceImpl from "../Recovery/recovery.crud.service.impl";
+import { RecoveryRepositoryModule } from "src/Repository/Implematation/Recovery/recovery.repository.module";
 
 
 @Module({
-    imports: [UserRepositoryModule, InstitutionServiceModule],
+    imports: [UserRepositoryModule, InstitutionServiceModule,RecoveryRepositoryModule],
     providers: [
           {
             provide: UserCrudServiceInterface,
@@ -27,7 +30,11 @@ import { InstitutionServiceModule } from "../Institution/institution.service.mod
             provide: MemberCrudServiceInterface,
             useClass: MemberCrudServiceImpl,
           }
+          , {
+            provide: RecoveryCrudServiceInterface,
+            useClass: RecoveryCrudServiceImpl,
+          }
     ],
-    exports: [ConfigCrudServiceInterface, UserCrudServiceInterface, AccountCrudServiceInterface, MemberCrudServiceInterface]
+    exports: [ConfigCrudServiceInterface, UserCrudServiceInterface, AccountCrudServiceInterface, MemberCrudServiceInterface,RecoveryCrudServiceInterface]
 })
 export class UserServiceModule{}

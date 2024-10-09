@@ -1,28 +1,40 @@
-import { Repository } from "typeorm";
+import { DeepPartial, Repository } from "typeorm";
 import AbstractCrudRepositoryInterface from "../Interface/abstract.crud.repository.interface";
 import OptionList from "../Utils/option.list";
 import BaseEntity from "src/Model/baseEntity";
 
 
 export default abstract class BaseCrudRepository<T extends BaseEntity> implements AbstractCrudRepositoryInterface<T> {
-    
-    constructor(readonly repository: Repository<T>) {}
 
-    save(entity: T | T[]): Promise<T | T[]> {
+    constructor(readonly repository: Repository<T>) { }
+
+    //  save(entity: T | T[]| DeepPartial<T> ): Promise<T | T[]> {
+    //     if (Array.isArray(entity)) {
+    //         return this.repository.save(entity)
+    //     } else {
+    //         return this.repository.save(entity)
+    //    }
+    //  }
+
+    save(entity: T | T[] | DeepPartial<T>): Promise<T | T[]> {
         if (Array.isArray(entity)) {
-            return this.repository.save(entity)
+
+            const newEntities = entity.map(item => this.repository.create(item));
+            return this.repository.save(newEntities);
         } else {
-            return this.repository.save(entity)
+
+            const newEntity = this.repository.create(entity);
+            return this.repository.save(newEntity);
         }
     }
 
-    getById(id: number, relations? : string[]): Promise<T> {
+    getById(id: number, relations?: string[]): Promise<T> {
         return this.repository.findOne({
-            where: {id: id as any},
+            where: { id: id as any },
             relations: relations || []
         })
     }
-        
+
     count(): Promise<number> {
         return this.repository.count()
     }
@@ -38,15 +50,17 @@ export default abstract class BaseCrudRepository<T extends BaseEntity> implement
     update(id: number, partialEntity: Partial<T>): Promise<T> {
         return this.repository.findOneById(id).then(entity => {
             if (!entity) {
-               return null
+                return null
             }
             Object.assign(entity, partialEntity)
             return this.repository.save(entity)
         });
     }
-    
+
     delete(id: number): Promise<void> {
-        return this.repository.delete(id).then(() => {})
+        return this.repository.delete(id).then(() => { })
     }
-    
+
+
+
 }

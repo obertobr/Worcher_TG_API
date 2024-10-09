@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import Account from "../User/account.entity";
 
 @Entity()
 export default class Recovery extends BaseEntity{
@@ -6,8 +7,11 @@ export default class Recovery extends BaseEntity{
   @PrimaryGeneratedColumn({name: 'id'})
   id: number;
 
-  @Column({name: 'user_id', nullable: false})
-  user_id: number;
+  
+  @OneToOne(() => Account, account => account.recovery,{nullable:false,eager:true})
+  @JoinColumn()
+  account: Account;
+  
 
   @Column({name: 'recovery_code', nullable: false})
   recovery_code: number;

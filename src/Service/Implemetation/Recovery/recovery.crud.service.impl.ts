@@ -7,12 +7,21 @@ import Address from "src/Model/Address/address.entity";
 import Recovery from "src/Model/Recovery/recovery.entity";
 import RecoveryCrudRepositoryInterface from "src/Repository/Interface/Recovery/recovery.crud.repository.interface";
 import RecoveryCrudServiceInterface from "src/Service/Interface/Recovery/recovery.crud.service.interface";
+import Account from "src/Model/User/account.entity";
+
 
 @Injectable()
 export default class RecoveryCrudServiceImpl extends BaseCrudService<Recovery> implements RecoveryCrudServiceInterface {
-    
+    private RecoveryRepository: RecoveryCrudRepositoryInterface
     constructor(@Inject(RecoveryCrudRepositoryInterface) repository: RecoveryCrudRepositoryInterface) {
         super(repository);
+        this.RecoveryRepository = repository
+    }
+
+
+
+    protected beforeSave(entity: Recovery): void {
+        entity.date_generation = new Date();
     }
 
     async validate(entity: Recovery): Promise<ErrorBuilder> {
@@ -23,6 +32,12 @@ export default class RecoveryCrudServiceImpl extends BaseCrudService<Recovery> i
             errorBuilder.addErrorMessage("code cannot be empty")
         }
 
+        
+    
         return errorBuilder;
+    }
+    async findRecoveryAccount(account:Account):Promise<Recovery>{
+
+        return this.RecoveryRepository.findRecoveryAccount(account)
     }
 }

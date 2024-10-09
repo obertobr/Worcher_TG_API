@@ -13,7 +13,9 @@ export default class AccountCrudRepositoryImpl extends BaseCrudRepository<Accoun
     }
     async findByEmail(email:string){
         return this.repository.findOne({
-            where: { email}
+            where: {email}
         })
     } 
+
+    
 }

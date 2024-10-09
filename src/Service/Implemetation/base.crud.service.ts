@@ -6,7 +6,7 @@ import ValidationExcpection from "../Validation/validation.exception";
 
 export default abstract class BaseCrudService<T> implements AbstractCrudServiceInterface<T> {
     
-    private repository: AbstractCrudRepositoryInterface<T>;
+    protected repository: AbstractCrudRepositoryInterface<T>;
 
     constructor(repository: AbstractCrudRepositoryInterface<T>) {
         this.repository = repository;

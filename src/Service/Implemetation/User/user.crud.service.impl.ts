@@ -12,9 +12,12 @@ import { EmailService } from "../Email/email.service";
 import * as bcrypt from 'bcrypt';
 import { UserRepositoryModule } from "src/Repository/Implematation/User/user.repository.module";
 import AccountCrudRepositoryImpl from "src/Repository/Implematation/User/account.crud.repository.impl";
-import { Repository } from "typeorm";
+import { DeepPartial, Repository } from "typeorm";
 import AccountCrudRepositoryInterface from "src/Repository/Interface/User/account.crud.repository.interface";
 import Account from "src/Model/User/account.entity";
+import RecoveryCrudRepositoryInterface from "src/Repository/Interface/Recovery/recovery.crud.repository.interface";
+import RecoveryCrudServiceInterface from "src/Service/Interface/Recovery/recovery.crud.service.interface";
+import Recovery from "src/Model/Recovery/recovery.entity";
 
 
 @Injectable()
@@ -22,20 +25,21 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
     private configService: ConfigCrudServiceInterface
     private accountService: AccountCrudServiceInterface
-
+    private serviceRecovery: RecoveryCrudServiceInterface
     private repositoryAccount: AccountCrudRepositoryInterface
 
     private emailService = new EmailService()
     constructor(@Inject(UserCrudRepositoryInterface) repository: UserCrudRepositoryInterface,
                 @Inject(ConfigCrudServiceInterface) configService: ConfigCrudServiceInterface,
                 @Inject(AccountCrudServiceInterface) accountService: AccountCrudServiceInterface,
-                @Inject(AccountCrudRepositoryInterface) repositoryAccount: AccountCrudRepositoryInterface
-                
+                @Inject(AccountCrudRepositoryInterface) repositoryAccount: AccountCrudRepositoryInterface,
+                @Inject(RecoveryCrudServiceInterface) serviceRecovery: RecoveryCrudServiceInterface,
     ) {
         super(repository);
         this.configService = configService;
         this.accountService = accountService;
         this.repositoryAccount = repositoryAccount;
+        this.serviceRecovery = serviceRecovery
     }
 
     private isValidCPF(cpf: string) {
@@ -128,23 +132,42 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         console.log(entity)
         return errorBuilder;
     }
-    async recoveryPassword(email:string):Promise<void>{
+
+    async recoveryPassword(email:string):Promise<{accountId:number}>{
+        const errorBuilder = new ErrorBuilder()
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        let account:any
-        if(regex.test(email)){
-            account = await this.repositoryAccount.findByEmail(email)
+        let account:Account
+        
+        if(!regex.test(email)){
+            errorBuilder.addErrorMessage('Invalid email')            
         }else{
-            return
+            account = await this.repositoryAccount.findByEmail(email)
+            if(account == null){
+                errorBuilder.addErrorMessage('There is no account with this email')           
+            }
         }
 
-
-        const codigo = Math.floor(100000+Math.random()*900000)
+        if(errorBuilder.hasErrors()){
+            errorBuilder.toThrowErrors()
+        }
+        const code = Math.floor(100000+Math.random()*900000)
         const emails = this.emailService
-        await emails.sendEmail(account.email,"password recovery","your password",`<p>${codigo}<p>`)
-        
-
-        
-        return 
+        const data: DeepPartial<any> = {
+            account:account, 
+            recovery_code: code,
+        };
+        const recovery = await this.serviceRecovery.findRecoveryAccount(account)
+        if(!recovery){
+            
+            await this.serviceRecovery.save(data)
+        }else{
+            recovery.recovery_code = code
+            recovery.date_generation = new Date()
+            await this.serviceRecovery.update(recovery)
+        }
+        await emails.sendEmail(account.email,"password recovery","your password",`<p>${code}<p>`)
+ 
+        return {accountId:account.id}
     }
 
 }

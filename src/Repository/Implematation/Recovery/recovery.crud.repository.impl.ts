@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import Recovery from "src/Model/Recovery/recovery.entity";
 import RecoveryCrudRepositoryInterface from "src/Repository/Interface/Recovery/recovery.crud.repository.interface";
+import Account from "src/Model/User/account.entity";
 
 
 @Injectable()
@@ -12,5 +13,11 @@ export default class RecoveryCrudRepositoryImpl extends BaseCrudRepository<Recov
     constructor(@InjectRepository(Recovery) readonly repository: Repository<Recovery>){
         super(repository)
     }
+
+    async findRecoveryAccount(account:Account){
+        return this.repository.findOne({
+            where: {account}
+        })
+    } 
 
 }
