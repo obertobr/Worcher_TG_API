@@ -19,6 +19,8 @@ import { AddressServiceModule } from './Service/Implemetation/Address/address.se
 import { CityController } from './Controller/Address/city.controller';
 import { AdressController } from './Controller/Address/address.controller';
 import { ConfigModule } from '@nestjs/config';
+import { RecoveryRepositoryModule } from './Repository/Implematation/Recovery/recovery.repository.module';
+
 
 
 @Module({
@@ -31,12 +33,13 @@ import { ConfigModule } from '@nestjs/config';
       password: '',
       database: 'worcher',
       entities: ['dist/**/*.entity.js'],
-      synchronize: true, // NÃO USE EM PRODUÇÃO - sincroniza as entidades automaticamente
+      synchronize: true // NÃO USE EM PRODUÇÃO - sincroniza as entidades automaticamente
     }),
     UserServiceModule,
     EventServiceModule,
     InstitutionServiceModule,
     AddressServiceModule,
+    RecoveryRepositoryModule
   ],
   controllers: [AppController,
                 ConfigController, 
