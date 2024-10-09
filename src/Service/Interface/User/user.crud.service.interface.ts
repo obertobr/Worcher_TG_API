@@ -6,5 +6,7 @@ export default abstract class UserCrudServiceInterface extends AbstractCrudServi
 
 
     abstract recoveryPassword(email:string): Promise<{accountId:number}>
+
+    abstract recoveryCheck(id:number,code:number):Promise<void>
     
 }

@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
 import { promises } from 'fs';
+import Account from 'src/Model/User/account.entity';
 import User from 'src/Model/User/user.entity';
 import UserCrudServiceInterface from 'src/Service/Interface/User/user.crud.service.interface';
 
@@ -48,6 +49,12 @@ export class UserController {
   async recoveryPassword(@Body() object : {email:string}):Promise<{accountId:Number}>{
       return this.service.recoveryPassword(object.email);
   }
+
+
+  @Post('/recovery_check')
+  async recoveryCheck(@Body() object : {id:number,code:number}):Promise<void>{
+    return this.service.recoveryCheck(object.id,object.code);
+}
 
   
 }

@@ -170,4 +170,30 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         return {accountId:account.id}
     }
 
+    async recoveryCheck(id:number,code:number):Promise<void>{
+        const errorBuilder = new ErrorBuilder()
+        const account =await this.accountService.getById(id)
+        let recovery: Recovery
+        if(!account){
+            errorBuilder.addErrorMessage('Account not found') 
+        }else{
+            recovery = await this.serviceRecovery.findRecoveryAccount(account)
+            if(!recovery){
+                errorBuilder.addErrorMessage('cannot recovery')
+            }else{
+                if(recovery.recovery_code != code){
+                    errorBuilder.addErrorMessage('codes does not matches')
+                }
+            } 
+            
+
+        }
+        if(errorBuilder.hasErrors()){
+            errorBuilder.toThrowErrors()
+            
+        }
+        await this.serviceRecovery.delete(recovery.id)
+        return
+    }
+
 }
