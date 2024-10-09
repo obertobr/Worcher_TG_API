@@ -10,6 +10,11 @@ import { EmailService } from "../Email/email.service";
 
 
 import * as bcrypt from 'bcrypt';
+import { UserRepositoryModule } from "src/Repository/Implematation/User/user.repository.module";
+import AccountCrudRepositoryImpl from "src/Repository/Implematation/User/account.crud.repository.impl";
+import { Repository } from "typeorm";
+import AccountCrudRepositoryInterface from "src/Repository/Interface/User/account.crud.repository.interface";
+import Account from "src/Model/User/account.entity";
 
 
 @Injectable()
@@ -17,15 +22,20 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
     private configService: ConfigCrudServiceInterface
     private accountService: AccountCrudServiceInterface
+
+    private repositoryAccount: AccountCrudRepositoryInterface
+
     private emailService = new EmailService()
     constructor(@Inject(UserCrudRepositoryInterface) repository: UserCrudRepositoryInterface,
                 @Inject(ConfigCrudServiceInterface) configService: ConfigCrudServiceInterface,
                 @Inject(AccountCrudServiceInterface) accountService: AccountCrudServiceInterface,
+                @Inject(AccountCrudRepositoryInterface) repositoryAccount: AccountCrudRepositoryInterface
                 
     ) {
         super(repository);
         this.configService = configService;
         this.accountService = accountService;
+        this.repositoryAccount = repositoryAccount;
     }
 
     private isValidCPF(cpf: string) {
@@ -118,12 +128,19 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         console.log(entity)
         return errorBuilder;
     }
-    async recoveryPassword(id:number):Promise<void>{
+    async recoveryPassword(email:string):Promise<void>{
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        let account:any
+        if(regex.test(email)){
+            account = await this.repositoryAccount.findByEmail(email)
+        }else{
+            return
+        }
 
-        const user =await this.getById(id)
+
         const codigo = Math.floor(100000+Math.random()*900000)
-        const email = this.emailService
-        await email.sendEmail(user.account.email,"password recovery","your password",`<p>${codigo}<p>`)
+        const emails = this.emailService
+        await emails.sendEmail(account.email,"password recovery","your password",`<p>${codigo}<p>`)
         
 
         

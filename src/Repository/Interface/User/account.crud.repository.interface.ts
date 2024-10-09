@@ -3,5 +3,5 @@ import Account from "src/Model/User/account.entity";
 
 export default abstract class AccountCrudRepositoryInterface extends AbstractCrudRepositoryInterface<Account> {
 
-    
+    abstract findByEmail(email:string): Promise<Account>
 }

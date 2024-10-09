@@ -3,5 +3,4 @@ import Account from "src/Model/User/account.entity";
 
 export default abstract class AccountCrudServiceInterface extends AbstractCrudServiceInterface<Account> {
 
-    
 }

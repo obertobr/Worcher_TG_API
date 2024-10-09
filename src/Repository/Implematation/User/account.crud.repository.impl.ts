@@ -11,5 +11,9 @@ export default class AccountCrudRepositoryImpl extends BaseCrudRepository<Accoun
     constructor(@InjectRepository(Account) readonly repository: Repository<Account>){
         super(repository)
     }
-
+    async findByEmail(email:string){
+        return this.repository.findOne({
+            where: { email}
+        })
+    } 
 }

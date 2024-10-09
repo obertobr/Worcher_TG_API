@@ -45,9 +45,9 @@ export class UserController {
   }
 
   @Post('/recovery_password')
-  async recoveryPassword(@Body() object : {id:number}):Promise<void>{
+  async recoveryPassword(@Body() object : {email:string}):Promise<void>{
       
-      return this.service.recoveryPassword(object.id);
+      return this.service.recoveryPassword(object.email);
   }
 
   

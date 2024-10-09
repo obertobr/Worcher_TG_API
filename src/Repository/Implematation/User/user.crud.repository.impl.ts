@@ -12,4 +12,6 @@ export default class UserCrudRepositoryImpl extends BaseCrudRepository<User> imp
         super(repository)
     }
 
+    
+
 }
