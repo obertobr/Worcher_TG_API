@@ -8,8 +8,8 @@ import Recovery from "src/Model/Recovery/recovery.entity";
 import RecoveryCrudRepositoryInterface from "src/Repository/Interface/Recovery/recovery.crud.repository.interface";
 import RecoveryCrudServiceInterface from "src/Service/Interface/Recovery/recovery.crud.service.interface";
 import Account from "src/Model/User/account.entity";
-
-
+import { ScheduleModule } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 @Injectable()
 export default class RecoveryCrudServiceImpl extends BaseCrudService<Recovery> implements RecoveryCrudServiceInterface {
     private RecoveryRepository: RecoveryCrudRepositoryInterface
@@ -38,4 +38,22 @@ export default class RecoveryCrudServiceImpl extends BaseCrudService<Recovery> i
 
         return this.RecoveryRepository.findRecoveryAccount(account)
     }
+//'0 0 * * *'
+//getHours() - 24
+    @Cron('*/5 * * * *')
+  async removeExpiredRecoveryCodes() {
+    const expirationTime = new Date();
+    expirationTime.setHours(expirationTime.getMinutes() -10); 
+
+    const expiredCodes = await this.RecoveryRepository.findByDate(expirationTime);
+
+    if (expiredCodes.length > 0) {
+
+        for(let code of expiredCodes){
+           await this.RecoveryRepository.delete(code.id)
+        }
+      console.log(`Removido ${expiredCodes.length} códigos expirados.`);
+    }
+  }
+    
 }

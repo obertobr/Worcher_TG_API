@@ -20,11 +20,12 @@ import { CityController } from './Controller/Address/city.controller';
 import { AdressController } from './Controller/Address/address.controller';
 import { ConfigModule } from '@nestjs/config';
 import { RecoveryRepositoryModule } from './Repository/Implematation/Recovery/recovery.repository.module';
-
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
