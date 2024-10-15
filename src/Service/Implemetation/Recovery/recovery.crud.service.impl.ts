@@ -52,7 +52,6 @@ export default class RecoveryCrudServiceImpl extends BaseCrudService<Recovery> i
         for(let code of expiredCodes){
            await this.RecoveryRepository.delete(code.id)
         }
-      console.log(`Removido ${expiredCodes.length} códigos expirados.`);
     }
   }
     
