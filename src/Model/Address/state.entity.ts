@@ -7,10 +7,10 @@ export default class State extends BaseEntity {
   @PrimaryGeneratedColumn({name: 'id'})
   id: number;
 
-  @Column({name: 'name', nullable: false})
+  @Column({name: 'name'})
   name: string;
 
-  @Column({name: 'uf', nullable: false})
+  @Column({name: 'uf', nullable:true})
   uf: string;
 
   @OneToMany(() => City, city => city.state, { cascade: true })
