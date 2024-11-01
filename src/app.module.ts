@@ -27,6 +27,10 @@ import Address from './Model/Address/address.entity';
 import City from './Model/Address/city.entity';
 import State from './Model/Address/state.entity';
 import * as path from 'path';
+import { InstitutionController } from './Controller/Institution/institution.controller';
+import { DigitalFileRepositoryModule } from './Repository/Implematation/DigitalFile/digitalFile.repository.module';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+import { DigitalFileServiceModule } from './Service/Implemetation/DigitalFile/digitalFile.service.module';
 
 
 @Module({
@@ -43,11 +47,13 @@ import * as path from 'path';
       synchronize: true // NÃO USE EM PRODUÇÃO - sincroniza as entidades automaticamente
     }),
     TypeOrmModule.forFeature([Address, City, State]),
+    NestjsFormDataModule,
     UserServiceModule,
     EventServiceModule,
     InstitutionServiceModule,
     AddressServiceModule,
-    RecoveryRepositoryModule
+    RecoveryRepositoryModule,
+    DigitalFileServiceModule,
   ],
   controllers: [AppController,
                 ConfigController, 
@@ -59,7 +65,8 @@ import * as path from 'path';
                 PermissionController,
                 StateController,
                 CityController,
-                AdressController],
+                AdressController,
+                InstitutionController],
   providers: [
     AppService,
     CsvService,

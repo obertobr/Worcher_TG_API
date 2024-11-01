@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './Controller/response/response.interceptor';
 import * as dotenv from 'dotenv';
+import { ValidationPipe } from '@nestjs/common';
 
 
 
@@ -18,6 +19,12 @@ async function bootstrap() {
       credentials: true,
     }
   )
+  
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true // Transform is recomended configuration for avoind issues with arrays of files transformations
+    })
+  );
 
   await app.listen(3000);
 }

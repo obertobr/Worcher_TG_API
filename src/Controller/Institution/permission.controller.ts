@@ -1,8 +1,6 @@
 import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
 import Permission from 'src/Model/Institution/permission.entity';
-import Role from 'src/Model/Institution/role.entity';
 import PermissionCrudServiceInterface from 'src/Service/Interface/Institution/permission.crud.service.interface';
-import RoleCrudServiceInterface from 'src/Service/Interface/Institution/role.crud.service.interface';
 
 @Controller("/permission")
 export class PermissionController {

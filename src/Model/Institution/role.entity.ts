@@ -1,7 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
 import Member from "../User/member.entity";
 import Permission from "./permission.entity";
+import Institution from "./institution.entity";
 @Entity()
 export default class Role extends BaseEntity {
   
@@ -17,4 +18,7 @@ export default class Role extends BaseEntity {
   @ManyToMany(() => Permission, permission => permission.roleList, {eager: true})
   @JoinTable()
   permission: Permission[];
+
+  @ManyToOne(() => Institution, institution => institution.roleList)
+  institution: Institution; 
 }

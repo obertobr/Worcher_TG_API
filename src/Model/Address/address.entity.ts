@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
 import City from "./city.entity";
+import Institution from "../Institution/institution.entity";
 @Entity()
 export default class Address extends BaseEntity {
   
@@ -22,5 +23,6 @@ export default class Address extends BaseEntity {
   @ManyToOne(() => City, city => city.addressList, { cascade: true, eager:true})
   city: City;
 
-
+  @OneToOne(() => Institution, institution => institution.address)
+  institution: Institution;
 }

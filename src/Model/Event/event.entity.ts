@@ -1,6 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
 import Member from "../User/member.entity";
+import Institution from "../Institution/institution.entity";
 
 @Entity()
 export default class Event extends BaseEntity {
@@ -26,5 +27,8 @@ export default class Event extends BaseEntity {
   @ManyToMany(() => Member, member => member.particepatedEventList, { cascade: true })
   @JoinTable()
   registeredMemberList: Member[];
+
+  @ManyToOne(() => Institution, institution => institution.eventList)
+  institution: Institution;
 
 }
