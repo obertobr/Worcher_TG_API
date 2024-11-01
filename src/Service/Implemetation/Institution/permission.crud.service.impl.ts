@@ -16,7 +16,7 @@ export default class PermissionCrudServiceImpl extends BaseCrudService<Permissio
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){
-            errorBuilder.addErrorMessage("It is not possible to create a permission without a name")
+            errorBuilder.addErrorMessage("não é possivel criar permissões sem nome")
         }
 
         return errorBuilder;

@@ -29,7 +29,7 @@ export default class RecoveryCrudServiceImpl extends BaseCrudService<Recovery> i
         if(entity.recovery_code.toString().length !== 6){
             errorBuilder.addErrorMessage("wrong code")
         }else if(entity.recovery_code == null){
-            errorBuilder.addErrorMessage("code cannot be empty")
+            errorBuilder.addErrorMessage("Código não pode estar vazio")
         }
     
         return errorBuilder;

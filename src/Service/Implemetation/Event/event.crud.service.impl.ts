@@ -26,23 +26,23 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){
-            errorBuilder.addErrorMessage("Name is required")
+            errorBuilder.addErrorMessage("é nescessário informar o nome")
         } else if(entity.name.length < 4) {
-            errorBuilder.addErrorMessage("Event name must be at least 4 characters long")
+            errorBuilder.addErrorMessage("Nome do evento deve ter pelo menos 4 caracteres de tamanho")
         }
 
         if(entity.description == null){
-            errorBuilder.addErrorMessage("Description is required")
+            errorBuilder.addErrorMessage("é nescessário informar a Descrição")
         }
 
         if(entity.dateTimeOfExecution == null){
-            errorBuilder.addErrorMessage("The date on which the event will take place is required")
+            errorBuilder.addErrorMessage("é nescessário informar a data em que o evento será realizado")
         }
 
         if(entity.member == null){
-            errorBuilder.addErrorMessage("the member who created the event is required")
+            errorBuilder.addErrorMessage("é nescessário informar o membro que está criando o evento")
         }else if(await this.serviceMember.getById(entity.member.id)){
-            errorBuilder.addErrorMessage("the informed member does not exist")
+            errorBuilder.addErrorMessage("o membro informado não existe")
         }
 
         return errorBuilder;

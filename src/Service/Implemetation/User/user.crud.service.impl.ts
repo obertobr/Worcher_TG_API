@@ -165,7 +165,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
             recovery.date_generation = new Date()
             await this.serviceRecovery.update(recovery)
         }
-        await emails.sendEmail(account.email,"password recovery","your password",`<p>${code}<p>`)
+        await emails.sendEmail(account.email,"Recuperar senha","Código",`<p>${code}<p>`)
  
         return {accountId:account.id}
     }
@@ -175,14 +175,14 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         const account =await this.accountService.getById(id)
         let recovery: Recovery
         if(!account){
-            errorBuilder.addErrorMessage('Account not found') 
+            errorBuilder.addErrorMessage('Conta não encontrada') 
         }else{
             recovery = await this.serviceRecovery.findRecoveryAccount(account)
             if(!recovery){
-                errorBuilder.addErrorMessage('cannot recovery')
+                errorBuilder.addErrorMessage('Código inválido')
             }else{
                 if(recovery.recovery_code != code){
-                    errorBuilder.addErrorMessage('codes does not matches')
+                    errorBuilder.addErrorMessage('Código inválido')
                 }
             } 
             

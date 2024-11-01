@@ -26,14 +26,14 @@ export default class AccountCrudServiceImpl extends BaseCrudService<Account> imp
         const errorBuilder = new ErrorBuilder()
 
         if(entity.email == null){
-            errorBuilder.addErrorMessage("Email is required")
+            errorBuilder.addErrorMessage("É nescessário informar o email")
         } else if(!this.isEmail(entity.email)) {
-            errorBuilder.addErrorMessage("Email is invalid")
+            errorBuilder.addErrorMessage("Email inválido")
         }
         if(entity.password == null){
-            errorBuilder.addErrorMessage("Password is required")
+            errorBuilder.addErrorMessage("É nescessário informar a senha")
         } else if(!this.isValidPassword(entity.password)){
-            errorBuilder.addErrorMessage("Password is invalid")
+            errorBuilder.addErrorMessage("Senha inválida")
         }
 
         return errorBuilder;

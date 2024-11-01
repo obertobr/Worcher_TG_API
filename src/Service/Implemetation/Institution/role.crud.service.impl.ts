@@ -17,7 +17,7 @@ export default class RoleCrudServiceImpl extends BaseCrudService<Role> implement
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){
-            errorBuilder.addErrorMessage("It is not possible to create a position without a name")
+            errorBuilder.addErrorMessage("não é possivel criar posições sem nome")
         }
 
         return errorBuilder;

@@ -16,13 +16,13 @@ export default class EventCategoryCrudServiceImpl extends BaseCrudService<EventC
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){
-            errorBuilder.addErrorMessage("Name is required")
+            errorBuilder.addErrorMessage("É nescesário informar o nome")
         } else if(entity.name.length < 4) {
-            errorBuilder.addErrorMessage(" Event name must be at least 4 characters long")
+            errorBuilder.addErrorMessage("Nome do evento deve ter pelo menos 4 caracteres de tamanho")
         }
 
         if(entity.color == null){
-            errorBuilder.addErrorMessage("Color is required")
+            errorBuilder.addErrorMessage("é nescessário informar a cor")
         }
 
         return errorBuilder;

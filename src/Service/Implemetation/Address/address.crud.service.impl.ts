@@ -15,19 +15,19 @@ export default class AddressCrudServiceImpl extends BaseCrudService<Address> imp
     async validate(entity: Address): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
         if(entity.neighborhood == null){
-            errorBuilder.addErrorMessage("Neighborhood Name is required")
+            errorBuilder.addErrorMessage("Nome do bairro é nescessário")
         }
 
         if(entity.city == null){
-            errorBuilder.addErrorMessage("city Name is required")
+            errorBuilder.addErrorMessage("Nome da cidade é nescessário")
         }
 
         if(entity.number == null){
-            errorBuilder.addErrorMessage("number city Name is required")
+            errorBuilder.addErrorMessage("Numero da casa é nescessário")
         }
 
         if(entity.street == null){
-            errorBuilder.addErrorMessage("street Name is required")
+            errorBuilder.addErrorMessage("Nome do bairro é nescessário")
         }
 
         return errorBuilder;

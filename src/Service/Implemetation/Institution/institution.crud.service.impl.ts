@@ -21,7 +21,7 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){
-            errorBuilder.addErrorMessage("It is not possible to create a institution without a name")
+            errorBuilder.addErrorMessage("não é possivel criar uma instituição sem nome")
         }
 
         return errorBuilder;

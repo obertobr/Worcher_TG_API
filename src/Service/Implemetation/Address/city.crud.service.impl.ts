@@ -15,10 +15,10 @@ export default class CityCrudServiceImpl extends BaseCrudService<City> implement
     async validate(entity: City): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
         if(entity.name == null){
-            errorBuilder.addErrorMessage("Name is required")
+            errorBuilder.addErrorMessage("é nescessário informar o nome")
         }
         if(entity.state == null){
-            errorBuilder.addErrorMessage("state Name is required")
+            errorBuilder.addErrorMessage("Nome do estado é nescessário")
         }
 
         return errorBuilder;

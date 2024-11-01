@@ -26,15 +26,15 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
         const errorBuilder = new ErrorBuilder()
 
         if(entity.user == null){
-            errorBuilder.addErrorMessage("It is necessary to inform the user")
+            errorBuilder.addErrorMessage("É nescessaior informar um usuário")
         } else if(await this.serviceUser.getById(entity.user.id) == null){
-            errorBuilder.addErrorMessage("User does not exist")
+            errorBuilder.addErrorMessage("Usuário não existe")
         }
 
         if(entity.role == null){
-            errorBuilder.addErrorMessage("It is necessary to inform the role")
+            errorBuilder.addErrorMessage("É nescessaior informar um papel")
         } else if(await this.serviceRole.getById(entity.role.id) == null){
-            errorBuilder.addErrorMessage("Role does not exist")
+            errorBuilder.addErrorMessage("Papel não existe")
         }
 
         return errorBuilder;

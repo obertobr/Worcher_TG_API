@@ -30,15 +30,15 @@ export class EmailService {
                 html,
             };
             if(to.length <=0 || subject.length <=0 || text.length <=0 || html.length <=0){
-                return {message:'error sending the email cannot send email with empty fields'}
+                return {message:'não é possivel enviar email com campos nescessarios vazios'}
             }else{
                 if(!regex.test(to)){
-                    return {message:'invalid email'}
+                    return {message:'email invalido'}
                 }
                 return this.transporter.sendMail(mailOptions);
             }
         }catch(err){
-            return {message:'error sending the email ',err}
+            return {message:'ERRO enviando email: ',err}
         }
         
         
