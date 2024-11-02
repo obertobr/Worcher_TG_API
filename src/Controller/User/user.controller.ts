@@ -54,7 +54,10 @@ export class UserController {
   @Post('/recovery_check')
   async recoveryCheck(@Body() object : {id:number,code:number}):Promise<void>{
     return this.service.recoveryCheck(object.id,object.code);
-}
+  }
 
-  
+  @Post('/login')
+  async login(@Body() account: Account): Promise<User> {
+    return this.service.login(account.email, account.password);
+  }
 }

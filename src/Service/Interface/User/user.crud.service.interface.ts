@@ -1,4 +1,3 @@
-import ErrorBuilder from "src/Service/Validation/error.builder";
 import AbstractCrudServiceInterface from "../abstract.crud.service.interface";
 import User from "src/Model/User/user.entity";
 
@@ -8,5 +7,7 @@ export default abstract class UserCrudServiceInterface extends AbstractCrudServi
     abstract recoveryPassword(email:string): Promise<{accountId:number}>
 
     abstract recoveryCheck(id:number,code:number):Promise<void>
+
+    abstract login(email: string, password: string): Promise<User>
     
 }

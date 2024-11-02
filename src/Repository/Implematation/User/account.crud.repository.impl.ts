@@ -12,9 +12,10 @@ export default class AccountCrudRepositoryImpl extends BaseCrudRepository<Accoun
         super(repository)
     }
     async findByEmail(email:string){
-        return this.repository.findOne({
-            where: {email}
-        })
+        return this.repository.createQueryBuilder('account')
+        .leftJoinAndSelect('account.user', 'user')
+        .where('account.email = :email', { email })
+        .getOne();
     } 
 
     

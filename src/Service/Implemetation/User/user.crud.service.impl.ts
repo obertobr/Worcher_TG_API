@@ -10,14 +10,13 @@ import { EmailService } from "../Email/email.service";
 
 
 import * as bcrypt from 'bcrypt';
-import { UserRepositoryModule } from "src/Repository/Implematation/User/user.repository.module";
-import AccountCrudRepositoryImpl from "src/Repository/Implematation/User/account.crud.repository.impl";
-import { DeepPartial, Repository } from "typeorm";
+import { DeepPartial } from "typeorm";
 import AccountCrudRepositoryInterface from "src/Repository/Interface/User/account.crud.repository.interface";
 import Account from "src/Model/User/account.entity";
-import RecoveryCrudRepositoryInterface from "src/Repository/Interface/Recovery/recovery.crud.repository.interface";
+
 import RecoveryCrudServiceInterface from "src/Service/Interface/Recovery/recovery.crud.service.interface";
 import Recovery from "src/Model/Recovery/recovery.entity";
+import ValidationExcpection from "src/Service/Validation/validation.exception";
 
 
 @Injectable()
@@ -40,6 +39,16 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         this.accountService = accountService;
         this.repositoryAccount = repositoryAccount;
         this.serviceRecovery = serviceRecovery
+    }
+
+    async login(email: string, password: string): Promise<User> {
+       const account: Account = await this.accountService.findByEmail(email);
+
+        if(!account) throw new ValidationExcpection(['Nenhuma conta foi encontrada com esse email!'],"Erro ao fazer login")
+
+        if(!await bcrypt.compare(password, account.password)) throw new ValidationExcpection(['Senha incorreta!'],"Erro ao fazer login")
+
+        return account.user;
     }
 
     private isValidCPF(cpf: string) {

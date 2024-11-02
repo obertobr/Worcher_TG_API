@@ -12,6 +12,12 @@ export default class AccountCrudServiceImpl extends BaseCrudService<Account> imp
         super(repository);
     }
 
+    findByEmail(email: string): Promise<Account> {
+        const repository = this.repository as AccountCrudRepositoryInterface;
+
+        return repository.findByEmail(email);
+    }
+
     private isEmail(email) {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
