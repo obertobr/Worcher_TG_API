@@ -107,7 +107,7 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
         const entity = await this.repository.getById(id)
         
         if (!entity) {
-            throw new ValidationExcpection([`Entity with ID ${id} not found or already deleted`],'Error deleting object');
+            throw new ValidationExcpection([`Entidade com o ID: ${id} não encontrada ou já deletada`],'Erro deletando objeto');
         }
         
         await this.repository.delete(id);
@@ -116,7 +116,7 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
     async getById(id: number, relations? : string[]): Promise<DigitalFile> {
         const entity = await this.repository.getById(id)
         if (entity == null) {
-            throw new ValidationExcpection([`Entity with ID ${id} not found`],'Error getting object');
+            throw new ValidationExcpection([`Entidade com o ID: ${id} não encotrado`],'Erro deletando objeto');
         }
         return this.repository.getById(id, relations)
     }

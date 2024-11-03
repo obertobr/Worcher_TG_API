@@ -107,17 +107,17 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         const errorBuilder = new ErrorBuilder()
 
         if(entity.name == null){
-            errorBuilder.addErrorMessage("Name is required")
+            errorBuilder.addErrorMessage("Nome é nescessário")
         }
         if(entity.cpf == null){
-            errorBuilder.addErrorMessage("CPF is required")
+            errorBuilder.addErrorMessage("CPF é nescessário")
         } else if(!this.isValidCPF(entity.cpf)){
-            errorBuilder.addErrorMessage("CPF is invalid")
+            errorBuilder.addErrorMessage("CPF inválido")
         }
         if(entity.dateOfBirth == null){
-            errorBuilder.addErrorMessage("Date of birth is required")
+            errorBuilder.addErrorMessage("Data de nascimento é nescessária")
         } else if(!this.hasMinimumAge(entity.dateOfBirth, 12)){
-            errorBuilder.addErrorMessage("Below the minimum age")
+            errorBuilder.addErrorMessage("Abaixo da idade minima")
         }
 
         if(entity.config != null) {
@@ -126,7 +126,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
                 errorBuilder.addErrorMessage(configErrors)
             }
         } else {
-            errorBuilder.addErrorMessage("Config is required")
+            errorBuilder.addErrorMessage("Configuração é nescessária")
         }
 
         if(entity.account != null) {
@@ -135,7 +135,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
                 errorBuilder.addErrorMessage(accountErrors)
             }
         } else {
-            errorBuilder.addErrorMessage("Account is required")
+            errorBuilder.addErrorMessage("Conta é nescessária")
         }
 
         console.log(entity)
@@ -148,11 +148,11 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         let account:Account
         
         if(!regex.test(email)){
-            errorBuilder.addErrorMessage('Invalid email')            
+            errorBuilder.addErrorMessage('Email inválido')            
         }else{
             account = await this.repositoryAccount.findByEmail(email)
             if(account == null){
-                errorBuilder.addErrorMessage('There is no account with this email')           
+                errorBuilder.addErrorMessage('Não existe conta com esse email')           
             }
         }
 

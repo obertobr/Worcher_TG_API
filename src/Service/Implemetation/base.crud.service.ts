@@ -69,7 +69,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
         const entityUpdated = await this.repository.update(entity['id'], entity);
         
         if (!entityUpdated) {
-            throw new ValidationExcpection([`Entity with ID ${entity['id']} not found`],'Erro ao atualizar objeto');
+            throw new ValidationExcpection([`Entidade com o ID: ${entity['id']} não encontrada`],'Erro ao atualizar objeto');
         }
         
         this.afterUpdate(entityUpdated);
@@ -82,7 +82,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
         const entity = await this.repository.getById(id)
         
         if (!entity) {
-            throw new ValidationExcpection([`Entity with ID ${id} not found or already deleted`],'Error deleting object');
+            throw new ValidationExcpection([`Entidade com o ID: ${id} não encontrada ou já deletada`],'Erro ao deletar objeto');
         }
         
         await this.repository.delete(id);
@@ -91,7 +91,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     async getById(id: number, relations? : string[]): Promise<T> {
         const entity = await this.repository.getById(id)
         if (entity == null) {
-            throw new ValidationExcpection([`Entity with ID ${id} not found`],'Error getting object');
+            throw new ValidationExcpection([`Entidade com o ID: ${id} não encontrada`],'Erro para encontrar o objeto');
         }
         return this.repository.getById(id, relations)
     }
