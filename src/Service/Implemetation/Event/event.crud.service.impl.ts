@@ -41,7 +41,7 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
 
         if(entity.member == null){
             errorBuilder.addErrorMessage("é nescessário informar o membro que está criando o evento")
-        }else if(await this.serviceMember.getById(entity.member.id)){
+        }else if(!(await this.serviceMember.getById(entity.member.id))){
             errorBuilder.addErrorMessage("o membro informado não existe")
         }
 

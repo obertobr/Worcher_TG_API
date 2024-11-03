@@ -1,11 +1,14 @@
 import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import { FormDataRequest } from 'nestjs-form-data';
 import Event from 'src/Model/Event/event.entity';
+import DigitalFileCrudServiceInterface from 'src/Service/Interface/DigitalFile/digitalFile.crud.service.interface';
 import EventCrudServiceInterface from 'src/Service/Interface/Event/event.crud.service.interface';
 
 @Controller("/event")
 export class EventController {
   
-  constructor(@Inject(EventCrudServiceInterface) private readonly service: EventCrudServiceInterface) {}
+  constructor(@Inject(EventCrudServiceInterface) private readonly service: EventCrudServiceInterface,
+              @Inject(DigitalFileCrudServiceInterface) private readonly digitalFileservice: DigitalFileCrudServiceInterface) {}
 
   @Get('/count')
   count(): Promise<number> {
@@ -23,7 +26,16 @@ export class EventController {
   }
 
   @Post()
-  async create(@Body() event: Event): Promise<Event> {
+  @FormDataRequest()
+  async create(@Body() data): Promise<Event> {
+    const event = JSON.parse(data.content) as Event;
+    const image = data.image;
+
+    if(image){
+      const digitalFile = await this.digitalFileservice.save(image);
+      event.image = digitalFile;
+    }
+
     return this.service.save(event);
   }
 
@@ -33,13 +45,30 @@ export class EventController {
   }
 
   @Put()
-  async update(@Body() event: Event): Promise<Event> {
-    return this.service.update(event);
+  @FormDataRequest()
+  async update(@Body() data): Promise<Event> {
+    const event = JSON.parse(data.content) as Event;
+    const image = data.image;
+
+    if(image){
+      const oldImageId = (await this.service.getById(event.id)).image.id;
+      const digitalFile = await this.digitalFileservice.save(image);
+      event.image = digitalFile;
+      const result = await this.service.update(event);
+      await this.digitalFileservice.delete(oldImageId)
+      
+      return result
+    } else {
+      return this.service.update(event);
+    }
   }
 
   @Delete('/:id')
   async delete(@Param('id') id: number): Promise<void> {
-    return this.service.delete(id);
+    const imageId = (await this.service.getById(id)).image.id
+    const result = await this.service.delete(id)
+    await this.digitalFileservice.delete(imageId)
+    return result
   }
   
 }
