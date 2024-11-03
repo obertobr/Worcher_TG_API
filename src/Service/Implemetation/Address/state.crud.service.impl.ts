@@ -4,6 +4,7 @@ import ErrorBuilder from "src/Service/Validation/error.builder";
 import State from "src/Model/Address/state.entity";
 import StateCrudServiceInterface from "src/Service/Interface/Address/state.crud.service.interface";
 import StateCrudRepositoryInterface from "src/Repository/Interface/Address/state.crud.repository.interface";
+import OptionList from "src/Repository/Utils/option.list";
 
 @Injectable()
 export default class StateCrudServiceImpl extends BaseCrudService<State> implements StateCrudServiceInterface {
@@ -23,5 +24,16 @@ export default class StateCrudServiceImpl extends BaseCrudService<State> impleme
         }
 
         return errorBuilder;
+    }
+
+    async list(offset?: number, maxResult?: number): Promise<State[]> {
+        let states: State[];
+    
+        if (offset != null && maxResult != null) {
+            states = await this.repository.list(new OptionList(offset, maxResult));
+        } else {
+            states = await this.repository.listAll();
+        }
+        return states.sort((a, b) => a.name.localeCompare(b.name));
     }
 }
