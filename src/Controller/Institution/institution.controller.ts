@@ -29,9 +29,13 @@ export class InstitutionController {
   @Post()
   @FormDataRequest()
   async create(@Body() data): Promise<Institution> {
-    const institution = JSON.parse(data.content);
+    const institution = JSON.parse(data.content) as Institution;
     const image = data.image;
-    this.digitalFileservice.save(image);
+    
+    if(image){
+      const digitalFile = await this.digitalFileservice.save(image);
+      institution.image = digitalFile;
+    }
     return this.service.save(institution);
   }
 
@@ -41,13 +45,31 @@ export class InstitutionController {
   }
 
   @Put()
-  async update(@Body() institution: Institution): Promise<Institution> {
-    return this.service.update(institution);
+  @FormDataRequest()
+  async update(@Body() data): Promise<Institution> {
+    const institution = JSON.parse(data.content) as Institution;
+    const image = data.image;
+
+    if(image){
+      const oldImageId = (await this.service.getById(institution.id)).image.id;
+      const digitalFile = await this.digitalFileservice.save(image);
+      institution.image = digitalFile;
+      const result = await this.service.update(institution);
+      console.log(result)
+      await this.digitalFileservice.delete(oldImageId)
+      
+      return result
+    } else {
+      return this.service.update(institution);
+    }
   }
 
   @Delete('/:id')
   async delete(@Param('id') id: number): Promise<void> {
-    return this.service.delete(id);
+    const imageId = (await this.service.getById(id)).image.id
+    const result = await this.service.delete(id)
+    await this.digitalFileservice.delete(imageId)
+    return result
   }
   
 }

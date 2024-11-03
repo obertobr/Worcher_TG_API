@@ -5,6 +5,7 @@ import Member from "../User/member.entity";
 import Event from "../Event/event.entity";
 import EventCategory from "../Event/event.category.entity";
 import Address from "../Address/address.entity";
+import DigitalFile from "../DigitalFile/digitalFile.entity";
 @Entity()
 export default class Institution extends BaseEntity {
   
@@ -20,19 +21,23 @@ export default class Institution extends BaseEntity {
   @Column({name: 'description', nullable: false})
   description: string;
 
-  @OneToMany(() => Role, role => role.institution, {eager:true})
+  @OneToMany(() => Role, role => role.institution, {eager:true, cascade: true})
   roleList: Role[];
 
-  @OneToMany(() => Member, member => member.institution, {eager:true})
+  @OneToMany(() => Member, member => member.institution, {eager:true, cascade: true})
   memberList: Member[];
 
-  @OneToMany(() => Event, event => event.institution, {eager:true})
+  @OneToMany(() => Event, event => event.institution, {eager:true, cascade: true})
   eventList: Event[];
 
-  @OneToMany(() => EventCategory, eventCategory => eventCategory.institution, {eager:true})
+  @OneToMany(() => EventCategory, eventCategory => eventCategory.institution, {eager:true, cascade: true})
   eventCategoryList: EventCategory[];
 
-  @OneToOne(() => Address, address => address.institution, {eager:true})
+  @OneToOne(() => Address, address => address.institution, {eager:true, cascade: true})
   @JoinColumn()
   address: Address;
+
+  @OneToOne(() => DigitalFile, digitalFile => digitalFile.institution, {eager:true})
+  @JoinColumn()
+  image: DigitalFile;
 }

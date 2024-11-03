@@ -10,8 +10,6 @@ export default abstract class DigitalFileCrudServiceInterface {
 
    abstract saveAll(entitys: MemoryStoredFile[]): Promise<DigitalFile[]>
 
-   abstract update(entity: MemoryStoredFile): Promise<DigitalFile>;
-
    abstract getById(id: number, relations? : string[]): Promise<DigitalFile>
 
    abstract list(offset?: number, maxResult?: number): Promise<DigitalFile[]>

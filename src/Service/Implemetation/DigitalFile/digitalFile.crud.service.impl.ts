@@ -22,9 +22,7 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
         this.repository = repository;
     }
 
-    protected beforeSave(entity: MemoryStoredFile): void {
-        console.log(entity)
-    }
+    protected beforeSave(entity: MemoryStoredFile): void {}
 
     async validate(entity: MemoryStoredFile): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
@@ -34,7 +32,7 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
     }
 
 
-    protected afterSave(entity: MemoryStoredFile): void { }
+    protected afterSave(entity: DigitalFile): void { }
 
     protected beforeUpdate(entity: MemoryStoredFile): void {}
 
@@ -46,60 +44,46 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
 
     protected async beforeInsert(entity: MemoryStoredFile): Promise<void> { }
 
+    private createDigitalFile(url: string): DigitalFile {
+        const entity = new DigitalFile();
+        entity.url = url;
 
-    async save(entity: MemoryStoredFile): Promise<DigitalFile> {
-        this.beforeSave(entity)
-
-        console.log(await this.saveFile(entity))
-
-        const a: DigitalFile = {id: 2, name: "as"}
-        return a
-
-        // const errorBuilder = await this.validate(entity);
-        // if (!errorBuilder.hasErrors()) {
-        //     await this.beforeInsert(entity)
-
-        //     const savedEntity: DigitalFile = await this.repository.save(entity).then()
-        //     this.afterSave(savedEntity)
-        //     return savedEntity
-        // } else {
-        //     errorBuilder.toThrowErrors()
-        // }
+        return entity;
     }
 
-    async saveAll(entities: MemoryStoredFile[]): Promise<DigitalFile[]> {
-        // entities.forEach(async entity => {
-        //     this.beforeSave(entity)
-        //     const errorBuilder = await this.validate(entity)
-        //     if (errorBuilder.hasErrors()) {
-        //         errorBuilder.toThrowErrors()
-        //     }
+    async save(file: MemoryStoredFile): Promise<DigitalFile> {
+        this.beforeSave(file)
+        const errorBuilder = await this.validate(file);
+        if (!errorBuilder.hasErrors()) {
+            await this.beforeInsert(file)
 
-        //     await this.beforeInsert(entity)
-        // })
-        
-        // const savedEntities: DigitalFile[] = await this.repository.save(entities).then()
-        // savedEntities.forEach(entity => this.afterSave(entity))
-        // return savedEntities
-        const a: DigitalFile[] = [{id: 2, name: "as"}]
-        return a
+            const fileName = await this.saveFile(file)
+
+            const savedEntity: DigitalFile = await this.repository.save(this.createDigitalFile(fileName)).then()
+            this.afterSave(savedEntity)
+            return savedEntity
+        } else {
+            errorBuilder.toThrowErrors()
+        }
     }
 
-    async update(entity: MemoryStoredFile): Promise<DigitalFile> {
-        // this.beforeUpdate(entity);
-        // await this.beforeInsert(entity)
+    async saveAll(files: MemoryStoredFile[]): Promise<DigitalFile[]> {
+        let savedEntities: DigitalFile[] = [];
+        files.forEach(async file => {
+            this.beforeSave(file)
+            const errorBuilder = await this.validate(file)
+            if (errorBuilder.hasErrors()) {
+                errorBuilder.toThrowErrors()
+            }
 
-        // const entityUpdated = await this.repository.update(entity['id'], entity);
-        
-        // if (!entityUpdated) {
-        //     throw new ValidationExcpection([`Entity with ID ${entity['id']} not found`],'Erro ao atualizar objeto');
-        // }
-        
-        // this.afterUpdate(entityUpdated);
-        
-        // return entity;
-        const a: DigitalFile = {id: 2, name: "as"}
-        return a
+            const fileName = await this.saveFile(file)
+
+            savedEntities.push(await this.repository.save(this.createDigitalFile(fileName)).then())
+
+            await this.beforeInsert(file)
+        })
+        savedEntities.forEach(entity => this.afterSave(entity))
+        return savedEntities
     }
 
     async delete(id: number): Promise<void> {
@@ -109,6 +93,8 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
         if (!entity) {
             throw new ValidationExcpection([`Entidade com o ID: ${id} não encontrada ou já deletada`],'Erro deletando objeto');
         }
+
+        this.deleteFile(entity.url);
         
         await this.repository.delete(id);
     }
@@ -132,16 +118,26 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
         return this.repository.count()
     }
 
-    async saveFile(file: MemoryStoredFile): Promise<string> {
+    private async saveFile(file: MemoryStoredFile): Promise<string> {
         const extension = path.extname(file.originalName);
         const randomName = `${uuidv4()}${extension}`;
         const filePath = path.join(this.uploadPath, randomName);
     
         try {
           await fs.writeFile(filePath, file.buffer);
-          return filePath; // Retorna o caminho do arquivo salvo
+          return randomName; // Retorna o caminho do arquivo salvo
         } catch (err) {
           throw new Error('Erro ao salvar o arquivo: ' + err.message);
         }
       }
+
+    private async deleteFile(fileName:string): Promise<void> {
+        const filePath = path.join(this.uploadPath, fileName);
+
+        try {
+            await fs.unlink(filePath);
+        } catch (err) {
+            throw new Error('Erro ao remover o arquivo: ' + err.message);
+        }
+    }
 }

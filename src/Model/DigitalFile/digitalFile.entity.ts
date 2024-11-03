@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
+import Institution from "../Institution/institution.entity";
 @Entity()
 export default class DigitalFile extends BaseEntity {
   
@@ -7,6 +8,8 @@ export default class DigitalFile extends BaseEntity {
   id: number;
 
   @Column({name: 'url', nullable: false})
-  name: string;
+  url: string;
 
+  @OneToOne(() => Institution, institution => institution.image)
+  institution: Institution;
 }
