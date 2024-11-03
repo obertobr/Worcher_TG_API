@@ -23,7 +23,7 @@ export default class Member extends BaseEntity {
   @ManyToMany(() => Event, event => event.registeredMemberList)
   particepatedEventList: Event[];
 
-  @ManyToOne(() => Institution, institution => institution.memberList)
+  @ManyToOne(() => Institution, institution => institution.memberList, {nullable: false})
   institution: Institution;
 
 }

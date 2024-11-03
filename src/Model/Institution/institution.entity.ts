@@ -33,7 +33,7 @@ export default class Institution extends BaseEntity {
   @OneToMany(() => EventCategory, eventCategory => eventCategory.institution, {eager:true, cascade: true})
   eventCategoryList: EventCategory[];
 
-  @OneToOne(() => Address, address => address.institution, {eager:true, cascade: true})
+  @OneToOne(() => Address, address => address.institution, {eager:true, cascade: true, nullable: false})
   @JoinColumn()
   address: Address;
 

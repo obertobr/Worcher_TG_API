@@ -55,7 +55,6 @@ export class InstitutionController {
       const digitalFile = await this.digitalFileservice.save(image);
       institution.image = digitalFile;
       const result = await this.service.update(institution);
-      console.log(result)
       await this.digitalFileservice.delete(oldImageId)
       
       return result

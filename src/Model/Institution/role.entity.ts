@@ -19,6 +19,6 @@ export default class Role extends BaseEntity {
   @JoinTable()
   permission: Permission[];
 
-  @ManyToOne(() => Institution, institution => institution.roleList)
+  @ManyToOne(() => Institution, institution => institution.roleList, {nullable: false})
   institution: Institution; 
 }
