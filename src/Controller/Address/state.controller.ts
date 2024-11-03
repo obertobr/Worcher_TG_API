@@ -19,7 +19,7 @@ export class StateController {
 
   @Get('/id/:id')
   async getById(@Param('id') id: number): Promise<State> {
-    return this.service.getById(id);
+    return this.service.getById(id,['citiesList']);
   }
 
   @Post()
