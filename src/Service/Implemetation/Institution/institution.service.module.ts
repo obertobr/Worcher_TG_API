@@ -6,8 +6,8 @@ import PermissionCrudServiceInterface from "src/Service/Interface/Institution/pe
 import PermissionCrudServiceImpl from "./permission.crud.service.impl";
 import InstitutionCrudServiceInterface from "src/Service/Interface/Institution/institution.crud.service.interface";
 import InstitutionCrudServiceImpl from "./institution.crud.service.impl";
-import DigitalFileCrudServiceImpl from "../DigitalFile/digitalFile.crud.service.impl";
-import DigitalFileCrudServiceInterface from "src/Service/Interface/DigitalFile/digitalFile.crud.service.interface";
+import MembershipRequestCrudServiceInterface from "src/Service/Interface/Institution/membershipRequest.crud.service.interface";
+import MembershipRequestCrudServiceImpl from "./membershipRequest.crud.service.impl";
 
 @Module({
     imports: [InstitutionRepositoryModule],
@@ -21,8 +21,11 @@ import DigitalFileCrudServiceInterface from "src/Service/Interface/DigitalFile/d
           }, {
             provide: PermissionCrudServiceInterface,
             useClass: PermissionCrudServiceImpl,
+          }, {
+            provide: MembershipRequestCrudServiceInterface,
+            useClass: MembershipRequestCrudServiceImpl,
           }
     ],
-    exports: [InstitutionCrudServiceInterface, RoleCrudServiceInterface, PermissionCrudServiceInterface]
+    exports: [InstitutionCrudServiceInterface, RoleCrudServiceInterface, PermissionCrudServiceInterface, MembershipRequestCrudServiceInterface]
 })
 export class InstitutionServiceModule{}

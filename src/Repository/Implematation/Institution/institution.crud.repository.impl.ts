@@ -12,4 +12,10 @@ export default class InstitutionCrudRepositoryImpl extends BaseCrudRepository<In
         super(repository)
     }
 
+    async getInstitutionByCode(code: number){
+        return this.repository.findOne({
+            where: { code: code as any }
+        })
+    }
+
 }

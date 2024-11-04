@@ -3,6 +3,7 @@ import BaseEntity from "../baseEntity";
 import Config from "./config.entity";
 import Account from "./account.entity";
 import Member from "./member.entity";
+import MembershipRequest from "../Institution/membershipRequest.entity";
 
 @Entity()
 export default class User extends BaseEntity {
@@ -30,4 +31,7 @@ export default class User extends BaseEntity {
   @OneToMany(() => Member, member => member.user, { cascade: true, eager: true })
   @JoinColumn()
   memberList: Member[];
+
+  @OneToMany(() => MembershipRequest, membershipRequest => membershipRequest.user, { cascade: true})
+  membershipRequest: MembershipRequest[];
 }

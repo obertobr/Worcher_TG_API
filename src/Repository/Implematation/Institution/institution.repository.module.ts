@@ -9,9 +9,12 @@ import Permission from "src/Model/Institution/permission.entity";
 import Institution from "src/Model/Institution/institution.entity";
 import InstitutionCrudRepositoryInterface from "src/Repository/Interface/Institution/institution.crud.repository.interface";
 import InstitutionCrudRepositoryImpl from "./institution.crud.repository.impl";
+import MembershipRequestCrudRepositoryInterface from "src/Repository/Interface/Institution/membershipRequest.crud.repository.interface";
+import MembershipRequestCrudRepositoryImpl from "./membershipRequest.crud.repository.impl";
+import MembershipRequest from "src/Model/Institution/membershipRequest.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Institution, Role, Permission])],
+  imports: [TypeOrmModule.forFeature([Institution, Role, Permission, MembershipRequest])],
   providers: [
     {
       provide: InstitutionCrudRepositoryInterface,
@@ -22,8 +25,11 @@ import InstitutionCrudRepositoryImpl from "./institution.crud.repository.impl";
     }, {
       provide: PermissionCrudRepositoryInterface,
       useClass: PermissionCrudRepositoryImpl,
+    }, {
+      provide: MembershipRequestCrudRepositoryInterface,
+      useClass: MembershipRequestCrudRepositoryImpl,
     }
   ],
-  exports: [InstitutionCrudRepositoryInterface, RoleCrudRepositoryInterface, PermissionCrudRepositoryInterface]
+  exports: [InstitutionCrudRepositoryInterface, RoleCrudRepositoryInterface, PermissionCrudRepositoryInterface, MembershipRequestCrudRepositoryInterface]
 })
 export class InstitutionRepositoryModule { }

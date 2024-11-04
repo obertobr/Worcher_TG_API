@@ -1,16 +1,25 @@
 import { Inject, Injectable } from "@nestjs/common";
 import BaseCrudService from "../base.crud.service";
 import ErrorBuilder from "src/Service/Validation/error.builder";
-import Role from "src/Model/Institution/role.entity";
 import Institution from "src/Model/Institution/institution.entity";
 import InstitutionCrudRepositoryInterface from "src/Repository/Interface/Institution/institution.crud.repository.interface";
 import InstitutionCrudServiceInterface from "src/Service/Interface/Institution/institution.crud.service.interface";
+import MembershipRequest from "src/Model/Institution/membershipRequest.entity";
+import MembershipRequestCrudServiceInterface, { requestEntryInterface } from "src/Service/Interface/Institution/membershipRequest.crud.service.interface";
+import AbstractCrudRepositoryInterface from "src/Repository/Interface/abstract.crud.repository.interface";
 
 @Injectable()
 export default class InstitutionCrudServiceImpl extends BaseCrudService<Institution> implements InstitutionCrudServiceInterface {
+
+    membershipRequestService: MembershipRequestCrudServiceInterface;
+    repository: InstitutionCrudRepositoryInterface;
     
-    constructor(@Inject(InstitutionCrudRepositoryInterface) repository: InstitutionCrudRepositoryInterface) {
+    constructor(@Inject(InstitutionCrudRepositoryInterface) repository: InstitutionCrudRepositoryInterface,
+                @Inject(MembershipRequestCrudServiceInterface) membershipRequestService: MembershipRequestCrudServiceInterface) {
         super(repository);
+
+        this.repository = repository
+        this.membershipRequestService = membershipRequestService;
     }
 
     protected beforeSave(entity: Institution): void {
@@ -25,6 +34,27 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         }
 
         return errorBuilder;
+    }
+
+    async requestEntry(data: requestEntryInterface) {
+        const membershipRequest = new MembershipRequest()
+        Object.assign(membershipRequest, {
+            institution: { id: data.institutionId },
+            user: { id: data.userId }
+        });
+
+        return this.membershipRequestService.save(membershipRequest);
+    }
+
+    async getInstitutionByCode(code: number){
+        const errorBuilder = new ErrorBuilder()
+        const institution = await this.repository.getInstitutionByCode(code);
+        if(!institution){
+            errorBuilder.addErrorMessage("instituição não encontrada!")
+
+            errorBuilder.toThrowErrors()
+        }
+        return institution.id
     }
    
 

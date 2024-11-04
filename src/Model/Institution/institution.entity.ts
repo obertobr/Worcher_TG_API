@@ -6,6 +6,7 @@ import Event from "../Event/event.entity";
 import EventCategory from "../Event/event.category.entity";
 import Address from "../Address/address.entity";
 import DigitalFile from "../DigitalFile/digitalFile.entity";
+import MembershipRequest from "./membershipRequest.entity";
 @Entity()
 export default class Institution extends BaseEntity {
   
@@ -40,4 +41,7 @@ export default class Institution extends BaseEntity {
   @OneToOne(() => DigitalFile, digitalFile => digitalFile.institution, {eager:true})
   @JoinColumn()
   image: DigitalFile;
+
+  @OneToMany(() => MembershipRequest, membershipRequest => membershipRequest.user, { cascade: true})
+  membershipRequest: MembershipRequest[];
 }
