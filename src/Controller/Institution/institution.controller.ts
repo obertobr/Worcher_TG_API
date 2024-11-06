@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Post, Put} from '@nestjs/
 import { FormDataRequest } from 'nestjs-form-data';
 import Institution from 'src/Model/Institution/institution.entity';
 import MembershipRequest from 'src/Model/Institution/membershipRequest.entity';
+import User from 'src/Model/User/user.entity';
 import DigitalFileCrudServiceInterface from 'src/Service/Interface/DigitalFile/digitalFile.crud.service.interface';
 import InstitutionCrudServiceInterface from 'src/Service/Interface/Institution/institution.crud.service.interface';
 import { requestEntryInterface } from 'src/Service/Interface/Institution/membershipRequest.crud.service.interface';
@@ -31,14 +32,16 @@ export class InstitutionController {
   @Post()
   @FormDataRequest()
   async create(@Body() data): Promise<Institution> {
-    const institution = JSON.parse(data.content) as Institution;
+    const content = JSON.parse(data.content) as {institution: Institution, user: User}
+    const institution = content.institution
+    const user = content.user
     const image = data.image;
     
     if(image){
       const digitalFile = await this.digitalFileservice.save(image);
       institution.image = digitalFile;
     }
-    return this.service.save(institution);
+    return this.service.createInstitution(institution, user);
   }
 
   @Post('/all')

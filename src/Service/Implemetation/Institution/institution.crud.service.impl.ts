@@ -6,19 +6,26 @@ import InstitutionCrudRepositoryInterface from "src/Repository/Interface/Institu
 import InstitutionCrudServiceInterface from "src/Service/Interface/Institution/institution.crud.service.interface";
 import MembershipRequest from "src/Model/Institution/membershipRequest.entity";
 import MembershipRequestCrudServiceInterface, { requestEntryInterface } from "src/Service/Interface/Institution/membershipRequest.crud.service.interface";
-import AbstractCrudRepositoryInterface from "src/Repository/Interface/abstract.crud.repository.interface";
+import User from "src/Model/User/user.entity";
+import Member from "src/Model/User/member.entity";
+import Role from "src/Model/Institution/role.entity";
+import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
+import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
 
 @Injectable()
 export default class InstitutionCrudServiceImpl extends BaseCrudService<Institution> implements InstitutionCrudServiceInterface {
 
     membershipRequestService: MembershipRequestCrudServiceInterface;
+    memberService: MemberCrudServiceInterface;
     repository: InstitutionCrudRepositoryInterface;
     
     constructor(@Inject(InstitutionCrudRepositoryInterface) repository: InstitutionCrudRepositoryInterface,
-                @Inject(MembershipRequestCrudServiceInterface) membershipRequestService: MembershipRequestCrudServiceInterface) {
+                @Inject(MembershipRequestCrudServiceInterface) membershipRequestService: MembershipRequestCrudServiceInterface,
+                @Inject(MemberCrudServiceInterface) memberService: MemberCrudServiceInterface) {
         super(repository);
 
         this.repository = repository
+        this.memberService = memberService;
         this.membershipRequestService = membershipRequestService;
     }
 
@@ -34,6 +41,29 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         }
 
         return errorBuilder;
+    }
+
+    async createInstitution(institution: Institution, user: User): Promise<Institution>{
+        const roleAdmin = new Role()
+        roleAdmin.name = 'Admin'
+
+        const roleUser = new Role()
+        roleUser.name = 'User'
+
+        institution.roleList = [roleAdmin, roleUser]
+
+        const savedInstitution = await this.save(institution)
+
+        if(savedInstitution){
+            const member = new Member()
+            member.user = user
+            member.role = savedInstitution.roleList[0]
+            member.institution = savedInstitution
+
+            await this.memberService.save(member)
+        }
+
+        return savedInstitution
     }
 
     async requestEntry(data: requestEntryInterface) {

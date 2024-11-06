@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import ConfigCrudServiceImpl from "./config.crud.service.impl";
 import ConfigCrudServiceInterface from "src/Service/Interface/User/config.crud.service.interface";
 import { UserRepositoryModule } from "src/Repository/Implematation/User/user.repository.module";
@@ -15,7 +15,7 @@ import { RecoveryRepositoryModule } from "src/Repository/Implematation/Recovery/
 
 
 @Module({
-    imports: [UserRepositoryModule, InstitutionServiceModule,RecoveryRepositoryModule],
+    imports: [UserRepositoryModule,RecoveryRepositoryModule, forwardRef(() => InstitutionServiceModule)],
     providers: [
           {
             provide: UserCrudServiceInterface,
