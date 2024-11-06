@@ -1,3 +1,4 @@
+import { promises } from "dns";
 import AbstractCrudServiceInterface from "../abstract.crud.service.interface";
 import User from "src/Model/User/user.entity";
 
@@ -10,4 +11,7 @@ export default abstract class UserCrudServiceInterface extends AbstractCrudServi
 
     abstract login(email: string, password: string): Promise<User>
     
+
+    abstract checkEmail(email:string): Promise<boolean>
+
 }

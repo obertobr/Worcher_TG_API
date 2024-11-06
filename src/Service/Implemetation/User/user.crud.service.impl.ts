@@ -97,6 +97,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
     protected beforeSave(entity: User): void {
         entity.cpf = entity.cpf.replace(/[^\d]+/g, '');
+       
     }
 
     protected async beforeInsert(entity: User): Promise<void> {
@@ -105,7 +106,9 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
    async validate(entity: User): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
-
+        if(await this.checkEmail(entity.account.email)){
+            errorBuilder.addErrorMessage("não é possivel criar uma conta com esse email")
+        }
         if(entity.name == null){
             errorBuilder.addErrorMessage("Nome é nescessário")
         }
@@ -203,6 +206,15 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         }
         await this.serviceRecovery.delete(recovery.id)
         return
+    }
+
+    async checkEmail(email:string): Promise<boolean>{
+        const account: Account = await this.accountService.findByEmail(email);
+        if(account){
+            return true;
+
+        }
+        return false
     }
 
 }
