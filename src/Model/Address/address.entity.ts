@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn 
 import BaseEntity from "../baseEntity";
 import City from "./city.entity";
 import Institution from "../Institution/institution.entity";
+import Event from "../Event/event.entity";
 @Entity()
 export default class Address extends BaseEntity {
   
@@ -25,4 +26,7 @@ export default class Address extends BaseEntity {
 
   @OneToOne(() => Institution, institution => institution.address)
   institution: Institution;
+
+  @OneToOne(() => Event, event => event.address)
+  event: Event;
 }
