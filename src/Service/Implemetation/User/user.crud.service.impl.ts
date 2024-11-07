@@ -86,7 +86,11 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
     
         return true;
     }
+    async findByCpf(cpf: string): Promise<User> {
+        const repository = this.repository as UserCrudRepositoryInterface;
 
+        return repository.findByCpf(cpf);
+    }
     private hasMinimumAge(dateOfBirth: Date, minimumAge: number) {
         const today = new Date();
         const birthDate = new Date(dateOfBirth);
@@ -106,6 +110,9 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
    async validate(entity: User): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
+        if(await this.findByCpf(entity.cpf)){
+            errorBuilder.addErrorMessage("não é possivel criar uma conta com esse CPF")
+        }
         if(await this.checkEmail(entity.account.email)){
             errorBuilder.addErrorMessage("não é possivel criar uma conta com esse email")
         }

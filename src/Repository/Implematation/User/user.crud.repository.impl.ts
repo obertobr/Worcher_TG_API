@@ -11,7 +11,11 @@ export default class UserCrudRepositoryImpl extends BaseCrudRepository<User> imp
     constructor(@InjectRepository(User) readonly repository: Repository<User>){
         super(repository)
     }
-
+    async findByCpf(cpf:string){
+        return this.repository.createQueryBuilder('user')
+        .where('user.cpf = :cpf', { cpf })
+        .getOne();
+    } 
     
 
 }

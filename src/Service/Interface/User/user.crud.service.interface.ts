@@ -11,6 +11,7 @@ export default abstract class UserCrudServiceInterface extends AbstractCrudServi
 
     abstract login(email: string, password: string): Promise<User>
     
+    abstract findByCpf(cpf:string):Promise<User>
 
     abstract checkEmail(email:string): Promise<boolean>
 
