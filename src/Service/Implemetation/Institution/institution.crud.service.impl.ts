@@ -110,5 +110,4 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         return savedMember;
     }
    
-
 }
