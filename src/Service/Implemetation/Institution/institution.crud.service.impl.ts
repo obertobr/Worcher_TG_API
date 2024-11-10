@@ -11,6 +11,7 @@ import Member from "src/Model/User/member.entity";
 import Role from "src/Model/Institution/role.entity";
 import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
 import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
+import Permission from "src/Model/Institution/permission.entity";
 
 @Injectable()
 export default class InstitutionCrudServiceImpl extends BaseCrudService<Institution> implements InstitutionCrudServiceInterface {
@@ -45,12 +46,19 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
 
     async createInstitution(institution: Institution, user: User): Promise<Institution>{
         const roleAdmin = new Role()
-        roleAdmin.name = 'Admin'
+        roleAdmin.name = 'Administrador'
+        roleAdmin.permission = [{id: 1} as Permission,
+                                {id: 2} as Permission,
+                                {id: 3} as Permission,
+                                {id: 4} as Permission,
+                                {id: 5} as Permission]
 
         const roleUser = new Role()
-        roleUser.name = 'User'
+        roleUser.name = 'Membro'
 
         institution.roleList = [roleAdmin, roleUser]
+
+        console.log(institution)
 
         const savedInstitution = await this.save(institution)
 
