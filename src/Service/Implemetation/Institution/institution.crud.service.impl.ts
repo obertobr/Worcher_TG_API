@@ -94,6 +94,21 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         }
         return institution.id
     }
+
+    async acceptEntry(id: number) {
+        const membershipRequest = await this.membershipRequestService.getById(id);
+        
+        const member = new Member()
+        member.institution = membershipRequest.institution
+        member.user = membershipRequest.user
+        member.role = (await this.getById(membershipRequest.institution.id)).roleList[1]
+
+        const savedMember = await this.memberService.save(member)
+
+        await this.membershipRequestService.delete(id)
+
+        return savedMember;
+    }
    
 
 }
