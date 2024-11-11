@@ -21,7 +21,7 @@ import { AdressController } from './Controller/Address/address.controller';
 import { ConfigModule } from '@nestjs/config';
 import { RecoveryRepositoryModule } from './Repository/Implematation/Recovery/recovery.repository.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CsvService } from './Service/Implemetation/CsvAdress/Csvaddress.crud.service.impl';
+import { CsvService } from './Service/Implemetation/Csv/csv.crud.service.impl';
 import { AddressRepositoryModule } from './Repository/Implematation/Address/address.repository.module';
 import Address from './Model/Address/address.entity';
 import City from './Model/Address/city.entity';
@@ -32,6 +32,7 @@ import { DigitalFileRepositoryModule } from './Repository/Implematation/DigitalF
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { DigitalFileServiceModule } from './Service/Implemetation/DigitalFile/digitalFile.service.module';
 import { AccountController } from './Controller/User/account.controller';
+import Permission from './Model/Institution/permission.entity';
 
 
 @Module({
@@ -47,7 +48,7 @@ import { AccountController } from './Controller/User/account.controller';
       entities: ['dist/**/*.entity.js'],
       synchronize: true // NÃO USE EM PRODUÇÃO - sincroniza as entidades automaticamente
     }),
-    TypeOrmModule.forFeature([Address, City, State]),
+    TypeOrmModule.forFeature([Address, City, State, Permission]),
     NestjsFormDataModule,
     UserServiceModule,
     EventServiceModule,
@@ -88,8 +89,9 @@ export class AppModule implements OnModuleInit {
   async onModuleInit() {
     const statefilePath = path.join(__dirname, '..', 'csv_arquives', 'estados.csv');
     const citiesfilePath = path.join(__dirname, '..', 'csv_arquives', 'municipios.csv');
+    const permissionsfilePath = path.join(__dirname, '..', 'csv_arquives', 'permissions.csv');
     try {
-      await this.csvService.processCsv(statefilePath,citiesfilePath);
+      await this.csvService.processCsv(statefilePath,citiesfilePath, permissionsfilePath);
     } catch (error) {
       console.error('Erro Trying to  process CSV:', error.message);
     }

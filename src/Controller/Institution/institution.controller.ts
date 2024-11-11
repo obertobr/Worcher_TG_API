@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Post, Put} from '@nestjs/
 import { FormDataRequest } from 'nestjs-form-data';
 import Institution from 'src/Model/Institution/institution.entity';
 import MembershipRequest from 'src/Model/Institution/membershipRequest.entity';
+import Member from 'src/Model/User/member.entity';
 import User from 'src/Model/User/user.entity';
 import DigitalFileCrudServiceInterface from 'src/Service/Interface/DigitalFile/digitalFile.crud.service.interface';
 import InstitutionCrudServiceInterface from 'src/Service/Interface/Institution/institution.crud.service.interface';
@@ -84,6 +85,11 @@ export class InstitutionController {
   @Post('/requestEntry')
   async requestEntry(@Body() data: requestEntryInterface): Promise<MembershipRequest> {
     return this.service.requestEntry(data);
+  }
+
+  @Get('/acceptEntry/:id')
+  async acceptEntry(@Param('id') id: number): Promise<Member> {
+    return this.service.acceptEntry(id);
   }
   
 }

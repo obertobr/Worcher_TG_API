@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import Role from 'src/Model/Institution/role.entity';
 import Member from 'src/Model/User/member.entity';
 import User from 'src/Model/User/user.entity';
 import MemberCrudServiceInterface from 'src/Service/Interface/User/member.crud.service.interface';
@@ -45,4 +46,9 @@ export class MemberController {
     return this.service.delete(id);
   }
   
+  @Put('/alterRole/:id')
+  async alterrole(@Param('id')id:number, @Body() role:Role):Promise<Member>{
+    return  this.service.alterRole(id,role);
+  }
+
 }
