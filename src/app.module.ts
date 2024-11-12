@@ -31,6 +31,7 @@ import { InstitutionController } from './Controller/Institution/institution.cont
 import { DigitalFileRepositoryModule } from './Repository/Implematation/DigitalFile/digitalFile.repository.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { DigitalFileServiceModule } from './Service/Implemetation/DigitalFile/digitalFile.service.module';
+import { AccountController } from './Controller/User/account.controller';
 import Permission from './Model/Institution/permission.entity';
 
 
@@ -67,7 +68,9 @@ import Permission from './Model/Institution/permission.entity';
                 StateController,
                 CityController,
                 AdressController,
-                InstitutionController],
+                InstitutionController,
+                AccountController
+              ],
   providers: [
     AppService,
     CsvService,

@@ -4,6 +4,8 @@ import ErrorBuilder from "src/Service/Validation/error.builder";
 import Account from "src/Model/User/account.entity";
 import AccountCrudServiceInterface from "src/Service/Interface/User/account.crud.service.interface";
 import AccountCrudRepositoryInterface from "src/Repository/Interface/User/account.crud.repository.interface";
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export default class AccountCrudServiceImpl extends BaseCrudService<Account> implements AccountCrudServiceInterface {
@@ -26,6 +28,10 @@ export default class AccountCrudServiceImpl extends BaseCrudService<Account> imp
     private isValidPassword(password) {
         const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
         return regex.test(password);
+    }
+
+    protected async beforeInsert(entity: Account): Promise<void> {
+        entity.password = await bcrypt.hash(entity.password, 10);
     }
 
     async validate(entity: Account): Promise<ErrorBuilder> {

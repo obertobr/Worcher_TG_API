@@ -6,6 +6,7 @@ import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.s
 import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
 import RoleCrudServiceInterface from "src/Service/Interface/Institution/role.crud.service.interface";
 import UserCrudServiceInterface from "src/Service/Interface/User/user.crud.service.interface";
+import Role from "src/Model/Institution/role.entity";
 
 @Injectable()
 export default class MemberCrudServiceImpl extends BaseCrudService<Member> implements MemberCrudServiceInterface {   
@@ -20,6 +21,7 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
         super(repository);
         this.serviceRole = serviceRole;
         this.serviceUser = serviceUser;
+
     }
    
     async validate(entity: Member): Promise<ErrorBuilder> {
@@ -39,5 +41,9 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
 
         return errorBuilder;
     }
-
+    async alterRole(id:number,role:Role):Promise<Member>{
+          const userRole =await this.getById(id,["user"])
+          userRole.role = role 
+          return await this.update(userRole)  
+    }
 }
