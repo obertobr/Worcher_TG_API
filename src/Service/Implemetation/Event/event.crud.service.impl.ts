@@ -25,6 +25,8 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
     async validate(entity: Event): Promise<ErrorBuilder> {
         const errorBuilder = new ErrorBuilder()
 
+        console.log(entity)
+
         if(entity.name == null){
             errorBuilder.addErrorMessage("é nescessário informar o nome")
         } else if(entity.name.length < 4) {
@@ -43,6 +45,10 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
             errorBuilder.addErrorMessage("é nescessário informar o membro que está criando o evento")
         }else if(!(await this.serviceMember.getById(entity.member.id))){
             errorBuilder.addErrorMessage("o membro informado não existe")
+        }
+
+        if(entity.eventCategory == null){
+            errorBuilder.addErrorMessage(" A categoria do evento deve ser informada!")
         }
 
         return errorBuilder;

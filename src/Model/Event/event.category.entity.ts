@@ -1,6 +1,8 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
 import Institution from "../Institution/institution.entity";
+import Event from "./event.entity";
 
 @Entity()
 export default class EventCategory extends BaseEntity {
@@ -16,5 +18,9 @@ export default class EventCategory extends BaseEntity {
 
   @ManyToOne(() => Institution, institution => institution.eventCategoryList, {nullable: false})
   institution: Institution;
+
+  @OneToMany(() => Event, event => event.eventCategory, {eager:true, cascade: true})
+  eventList: Event[];
+
 
 }

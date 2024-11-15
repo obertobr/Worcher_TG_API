@@ -27,7 +27,7 @@ export class InstitutionController {
 
   @Get('/id/:id')
   async getById(@Param('id') id: number): Promise<Institution> {
-    return this.service.getById(id);
+    return this.service.getById(id, ["eventCategoryList"]);
   }
 
   @Post()

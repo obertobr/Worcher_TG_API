@@ -4,6 +4,7 @@ import Member from "../User/member.entity";
 import Institution from "../Institution/institution.entity";
 import DigitalFile from "../DigitalFile/digitalFile.entity";
 import Address from "../Address/address.entity";
+import EventCategory from "./event.category.entity";
 
 @Entity()
 export default class Event extends BaseEntity {
@@ -32,6 +33,9 @@ export default class Event extends BaseEntity {
 
   @ManyToOne(() => Institution, institution => institution.eventList, {nullable: false})
   institution: Institution;
+
+  @ManyToOne(() => EventCategory, eventCategory => eventCategory.eventList, {nullable: false})
+  eventCategory: EventCategory;
 
   @OneToOne(() => Address, address => address.event, {eager:true, cascade: true})
   @JoinColumn()
