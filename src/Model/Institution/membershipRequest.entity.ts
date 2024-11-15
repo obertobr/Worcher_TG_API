@@ -11,6 +11,6 @@ export default class MembershipRequest extends BaseEntity {
   @ManyToOne(() => User, user => user.membershipRequest, {eager: true})
   user: User;
 
-  @ManyToOne(() => Institution, institution => institution.membershipRequest, {eager: true})
+  @ManyToOne(() => Institution, institution => institution.membershipRequest)
   institution: Institution;
 }
