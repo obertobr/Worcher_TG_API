@@ -28,7 +28,7 @@ export default class User extends BaseEntity {
   @JoinColumn()
   account: Account;
 
-  @OneToMany(() => Member, member => member.user, { cascade: true, eager: true })
+  @OneToMany(() => Member, member => member.user, { cascade: true})
   @JoinColumn()
   memberList: Member[];
 

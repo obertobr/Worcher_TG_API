@@ -42,6 +42,6 @@ export default class Institution extends BaseEntity {
   @JoinColumn()
   image: DigitalFile;
 
-  @OneToMany(() => MembershipRequest, membershipRequest => membershipRequest.user, { cascade: true})
+  @OneToMany(() => MembershipRequest, membershipRequest => membershipRequest.institution, { cascade: true, eager: true})
   membershipRequest: MembershipRequest[];
 }

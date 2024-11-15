@@ -58,8 +58,6 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
 
         institution.roleList = [roleAdmin, roleUser]
 
-        console.log(institution)
-
         const savedInstitution = await this.save(institution)
 
         if(savedInstitution){
@@ -84,7 +82,7 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         return this.membershipRequestService.save(membershipRequest);
     }
 
-    async getInstitutionByCode(code: number){
+    async getInstitutionByCode(code: number): Promise<number>{
         const errorBuilder = new ErrorBuilder()
         const institution = await this.repository.getInstitutionByCode(code);
         if(!institution){
@@ -95,8 +93,8 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         return institution.id
     }
 
-    async acceptEntry(id: number) {
-        const membershipRequest = await this.membershipRequestService.getById(id);
+    async acceptEntry(id: number): Promise<Member> {
+        const membershipRequest = await this.membershipRequestService.getById(id, ["institution"]);
         
         const member = new Member()
         member.institution = membershipRequest.institution
@@ -108,6 +106,19 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         await this.membershipRequestService.delete(id)
 
         return savedMember;
+    }
+
+    async getMembers(id: number, search: string): Promise<Member[]> {
+        if(!search){
+            search=""
+        }
+        const memberList = (await this.getById(id)).memberList;
+        
+        const searchedMembers = memberList.filter(member => 
+            member.user.name.includes(search)
+        );
+    
+        return searchedMembers;
     }
    
 }

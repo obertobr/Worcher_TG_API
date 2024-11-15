@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put} from '@nestjs/common';;
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query} from '@nestjs/common';;
 import { FormDataRequest } from 'nestjs-form-data';
 import Institution from 'src/Model/Institution/institution.entity';
 import MembershipRequest from 'src/Model/Institution/membershipRequest.entity';
@@ -6,13 +6,16 @@ import Member from 'src/Model/User/member.entity';
 import User from 'src/Model/User/user.entity';
 import DigitalFileCrudServiceInterface from 'src/Service/Interface/DigitalFile/digitalFile.crud.service.interface';
 import InstitutionCrudServiceInterface from 'src/Service/Interface/Institution/institution.crud.service.interface';
-import { requestEntryInterface } from 'src/Service/Interface/Institution/membershipRequest.crud.service.interface';
+import MembershipRequestCrudServiceInterface, { requestEntryInterface } from 'src/Service/Interface/Institution/membershipRequest.crud.service.interface';
 
 @Controller("/institution")
 export class InstitutionController {
+
+
   
   constructor(@Inject(InstitutionCrudServiceInterface) private readonly service: InstitutionCrudServiceInterface, 
-              @Inject(DigitalFileCrudServiceInterface) private readonly digitalFileservice: DigitalFileCrudServiceInterface) {}
+              @Inject(DigitalFileCrudServiceInterface) private readonly digitalFileservice: DigitalFileCrudServiceInterface,
+              @Inject(MembershipRequestCrudServiceInterface) private readonly membershipRequest: MembershipRequestCrudServiceInterface) {}
 
 
   @Get('/count')
@@ -91,5 +94,16 @@ export class InstitutionController {
   async acceptEntry(@Param('id') id: number): Promise<Member> {
     return this.service.acceptEntry(id);
   }
+
+  @Get('/getMembers/:id')
+  async getMembers(@Param('id') id: number, @Query('search') search?: string): Promise<Member[]> {
+    return this.service.getMembers(id, search);
+  }
+
+  @Delete('deleteMembershipRequest/:id')
+  async deleteMembershipRequest(@Param('id') id: number): Promise<void> {
+    return this.membershipRequest.delete(id)
+  }
+  
   
 }

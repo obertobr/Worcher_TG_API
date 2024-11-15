@@ -11,7 +11,7 @@ export default class Member extends BaseEntity {
   @PrimaryGeneratedColumn({name: 'id'})
   id: number;
 
-  @ManyToOne(() => User, user => user.memberList, {nullable: false})
+  @ManyToOne(() => User, user => user.memberList, {nullable: false, eager: true})
   user: User;
 
   @ManyToOne(() => Role, role => role.memberList, {eager: true, nullable: false})
