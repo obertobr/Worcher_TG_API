@@ -58,8 +58,6 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
 
         institution.roleList = [roleAdmin, roleUser]
 
-        console.log(institution)
-
         const savedInstitution = await this.save(institution)
 
         if(savedInstitution){
@@ -96,7 +94,7 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
     }
 
     async acceptEntry(id: number): Promise<Member> {
-        const membershipRequest = await this.membershipRequestService.getById(id);
+        const membershipRequest = await this.membershipRequestService.getById(id, ["institution"]);
         
         const member = new Member()
         member.institution = membershipRequest.institution

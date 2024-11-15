@@ -6,13 +6,16 @@ import Member from 'src/Model/User/member.entity';
 import User from 'src/Model/User/user.entity';
 import DigitalFileCrudServiceInterface from 'src/Service/Interface/DigitalFile/digitalFile.crud.service.interface';
 import InstitutionCrudServiceInterface from 'src/Service/Interface/Institution/institution.crud.service.interface';
-import { requestEntryInterface } from 'src/Service/Interface/Institution/membershipRequest.crud.service.interface';
+import MembershipRequestCrudServiceInterface, { requestEntryInterface } from 'src/Service/Interface/Institution/membershipRequest.crud.service.interface';
 
 @Controller("/institution")
 export class InstitutionController {
+
+
   
   constructor(@Inject(InstitutionCrudServiceInterface) private readonly service: InstitutionCrudServiceInterface, 
-              @Inject(DigitalFileCrudServiceInterface) private readonly digitalFileservice: DigitalFileCrudServiceInterface) {}
+              @Inject(DigitalFileCrudServiceInterface) private readonly digitalFileservice: DigitalFileCrudServiceInterface,
+              @Inject(MembershipRequestCrudServiceInterface) private readonly membershipRequest: MembershipRequestCrudServiceInterface) {}
 
 
   @Get('/count')
@@ -95,6 +98,11 @@ export class InstitutionController {
   @Get('/getMembers/:id')
   async getMembers(@Param('id') id: number, @Query('search') search?: string): Promise<Member[]> {
     return this.service.getMembers(id, search);
+  }
+
+  @Delete('deleteMembershipRequest/:id')
+  async deleteMembershipRequest(@Param('id') id: number): Promise<void> {
+    return this.membershipRequest.delete(id)
   }
   
   
