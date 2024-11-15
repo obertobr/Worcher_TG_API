@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put} from '@nestjs/common';;
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query} from '@nestjs/common';;
 import { FormDataRequest } from 'nestjs-form-data';
 import Institution from 'src/Model/Institution/institution.entity';
 import MembershipRequest from 'src/Model/Institution/membershipRequest.entity';
@@ -91,5 +91,11 @@ export class InstitutionController {
   async acceptEntry(@Param('id') id: number): Promise<Member> {
     return this.service.acceptEntry(id);
   }
+
+  @Get('/getMembers/:id')
+  async getMembers(@Param('id') id: number, @Query('search') search?: string): Promise<Member[]> {
+    return this.service.getMembers(id, search);
+  }
+  
   
 }
