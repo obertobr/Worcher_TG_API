@@ -13,9 +13,6 @@ export default class EventCategory extends BaseEntity {
   @Column({name: 'name'})
   name: string;
 
-  @Column({name: 'color'})
-  color: string;
-
   @ManyToOne(() => Institution, institution => institution.eventCategoryList, {nullable: false})
   institution: Institution;
 
