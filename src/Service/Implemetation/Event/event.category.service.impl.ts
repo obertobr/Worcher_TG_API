@@ -21,10 +21,6 @@ export default class EventCategoryCrudServiceImpl extends BaseCrudService<EventC
             errorBuilder.addErrorMessage("Nome do evento deve ter pelo menos 4 caracteres de tamanho")
         }
 
-        if(entity.color == null){
-            errorBuilder.addErrorMessage("é nescessário informar a cor")
-        }
-
         return errorBuilder;
     }
    
