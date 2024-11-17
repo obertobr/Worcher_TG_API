@@ -16,4 +16,6 @@ export default abstract class InstitutionCrudServiceInterface extends AbstractCr
     abstract acceptEntry(id: number): Promise<Member>
     
     abstract getMembers(id: number, search: string): Promise<Member[]>
+
+    abstract getInstitutionsByUserId(id: number): Promise<Institution[]>
 }

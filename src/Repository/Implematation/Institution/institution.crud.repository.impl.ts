@@ -12,10 +12,22 @@ export default class InstitutionCrudRepositoryImpl extends BaseCrudRepository<In
         super(repository)
     }
 
-    async getInstitutionByCode(code: number){
-        return this.repository.findOne({
-            where: { code: code as any }
-        })
+    async getInstitutionByCode(code: number): Promise<Institution> {
+        return this.repository
+            .createQueryBuilder('institution')
+            .where('institution.code = :code', { code })
+            .getOne();
     }
+    
+
+    async getInstitutionsByUserId(userId: number): Promise<Institution[]> {
+        return this.repository
+            .createQueryBuilder('institution')
+            .leftJoinAndSelect('institution.memberList', 'member')
+            .leftJoinAndSelect('member.user', 'user')
+            .where('user.id = :userId', { userId })
+            .getMany();
+    }
+    
 
 }

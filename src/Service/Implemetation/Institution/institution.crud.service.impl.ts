@@ -9,7 +9,6 @@ import MembershipRequestCrudServiceInterface, { requestEntryInterface } from "sr
 import User from "src/Model/User/user.entity";
 import Member from "src/Model/User/member.entity";
 import Role from "src/Model/Institution/role.entity";
-import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
 import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
 import Permission from "src/Model/Institution/permission.entity";
 
@@ -73,9 +72,11 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
     }
 
     async requestEntry(data: requestEntryInterface) {
+        const idInstitution = await this.getInstitutionByCode(data.codeInstitution)
+
         const membershipRequest = new MembershipRequest()
         Object.assign(membershipRequest, {
-            institution: { id: data.institutionId },
+            institution: { id: idInstitution },
             user: { id: data.userId }
         });
 
@@ -85,8 +86,9 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
     async getInstitutionByCode(code: number): Promise<number>{
         const errorBuilder = new ErrorBuilder()
         const institution = await this.repository.getInstitutionByCode(code);
+
         if(!institution){
-            errorBuilder.addErrorMessage("instituição não encontrada!")
+            errorBuilder.addErrorMessage("Instituição não encontrada!")
 
             errorBuilder.toThrowErrors()
         }
@@ -119,6 +121,12 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         );
     
         return searchedMembers;
+    }
+
+    async getInstitutionsByUserId(id: number): Promise<Institution[]>{
+        const listInstitutions = this.repository.getInstitutionsByUserId(id)
+
+        return listInstitutions
     }
    
 }
