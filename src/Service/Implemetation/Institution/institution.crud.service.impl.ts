@@ -72,11 +72,10 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
     }
 
     async requestEntry(data: requestEntryInterface) {
-        const idInstitution = await this.getInstitutionByCode(data.codeInstitution)
-
         const membershipRequest = new MembershipRequest()
+        
         Object.assign(membershipRequest, {
-            institution: { id: idInstitution },
+            institution: { id: data.idInstitution },
             user: { id: data.userId }
         });
 

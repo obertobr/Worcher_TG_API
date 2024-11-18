@@ -6,6 +6,6 @@ export default abstract class MembershipRequestCrudServiceInterface extends Abst
 }
 
 export class requestEntryInterface {
-    codeInstitution: number;
+    idInstitution: number;
     userId: number;
 }
