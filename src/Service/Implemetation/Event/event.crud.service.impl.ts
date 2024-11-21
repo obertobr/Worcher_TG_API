@@ -64,4 +64,53 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
 
             return this.repositoryEvent.getEventsByInstitutionAndCategory(institutionId,idCategory)
     }
+
+    async addMemberToEvent(eventId: number, memberId: number): Promise<void> {
+
+        const event = await this.repositoryEvent.getEventWithRegisteredMemberList(eventId)
+    
+        if (!event) {
+          throw new ValidationExcpection([`Event with id ${eventId} not found`]);
+        }
+    
+        const memberExists = event.registeredMemberList.some(
+          (member) => member.id === memberId
+        );
+    
+        if (memberExists) {
+          throw new ValidationExcpection([`Member with id ${memberId} is already registered in the event`]);
+        }
+    
+        const member = await this.serviceMember.getById(memberId);;
+
+        if (!member) {
+          throw new ValidationExcpection([`Member with id ${memberId} not found`]);
+        }
+    
+        event.registeredMemberList.push(member);
+    
+        await this.repositoryEvent.save(event);
+      }
+
+      async removeMemberFromEvent(eventId: number, memberId: number): Promise<void> {
+        const event = await this.repositoryEvent.getEventWithRegisteredMemberList(eventId)
+    
+        if (!event) {
+            throw new ValidationExcpection([`Event with id ${eventId} not found`]);
+        }
+      
+        const memberIndex = event.registeredMemberList.findIndex(
+          (member) => member.id === memberId
+        );
+      
+        if (memberIndex === -1) {
+          throw new Error(`Member with id ${memberId} is not registered in the event`);
+        }
+      
+        event.registeredMemberList.splice(memberIndex, 1);
+      
+        await this.repositoryEvent.save(event);
+      }
+      
+    
 }

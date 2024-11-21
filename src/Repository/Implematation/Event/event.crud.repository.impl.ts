@@ -34,4 +34,11 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
         return query.getMany();
       }
 
+      async getEventWithRegisteredMemberList(eventId: number): Promise<Event>{
+        return await this.repository.findOne({
+            where: { id: eventId },
+            relations: ['registeredMemberList'],
+          });
+      }
+
 }
