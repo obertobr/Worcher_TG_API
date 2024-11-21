@@ -3,12 +3,14 @@ import { AppModule } from './app.module';
 import { ResponseInterceptor } from './Controller/response/response.interceptor';
 import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express'; 
 
 
 
 async function bootstrap() {
   dotenv.config();
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   app.enableCors(
@@ -19,6 +21,10 @@ async function bootstrap() {
       credentials: true,
     }
   )
+
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/'
+  });
   
   app.useGlobalPipes(
     new ValidationPipe({
