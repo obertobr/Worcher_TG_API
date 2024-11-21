@@ -12,4 +12,26 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
         super(repository)
     }
 
+    async getEventsByInstitutionAndCategory(
+        institutionId: number,
+        idCategory?: number | null
+      ): Promise<Event[]> {
+
+        const query = this.repository
+          .createQueryBuilder("event")
+          .leftJoinAndSelect("event.member", "member")
+          .leftJoinAndSelect("event.registeredMemberList", "registeredMemberList")
+          .leftJoinAndSelect("event.institution", "institution")
+          .leftJoinAndSelect("event.eventCategory", "eventCategory")
+          .leftJoinAndSelect("event.address", "address")
+          .leftJoinAndSelect("event.image", "image")
+          .where("event.institution.id = :institutionId", { institutionId });
+      
+        if (idCategory) {
+          query.andWhere("event.eventCategory.id = :idCategory", { idCategory });
+        }
+      
+        return query.getMany();
+      }
+
 }

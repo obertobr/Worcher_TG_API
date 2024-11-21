@@ -5,18 +5,23 @@ import Event from "src/Model/Event/event.entity";
 import EventCrudServiceInterface from "src/Service/Interface/Event/event.crud.service.interface";
 import EventCrudRepositoryInterface from "src/Repository/Interface/Event/event.crud.repository.interface";
 import MemberCrudServiceInterface from "src/Service/Interface/User/member.crud.service.interface";
+import ValidationExcpection from "src/Service/Validation/validation.exception";
 
 @Injectable()
 export default class EventCrudServiceImpl extends BaseCrudService<Event> implements EventCrudServiceInterface {
     
     private serviceMember: MemberCrudServiceInterface;
+    private repositoryEvent: EventCrudRepositoryInterface;
 
     constructor(@Inject(EventCrudRepositoryInterface) repository: EventCrudRepositoryInterface,
                 @Inject(MemberCrudServiceInterface) _serviceMember: MemberCrudServiceInterface) {
         super(repository);
 
         this.serviceMember = _serviceMember;
+        this.repositoryEvent = repository
     }
+    
+    
 
     protected beforeSave(entity: Event): void {
         entity.creationDateTime = new Date();
@@ -52,5 +57,11 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
         }
 
         return errorBuilder;
+    }
+
+    getEventsByInstitutionAndCategory(institutionId: number, idCategory?: number | null): Promise<Event[]> {
+        if(!institutionId) throw new ValidationExcpection(["O id da instituição não foi informado!"])
+
+            return this.repositoryEvent.getEventsByInstitutionAndCategory(institutionId,idCategory)
     }
 }

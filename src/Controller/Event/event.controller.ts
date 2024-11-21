@@ -25,6 +25,11 @@ export class EventController {
     return this.service.getById(id);
   }
 
+  @Get('/getEventByInstitutionAndCategory/:idInstitution/:idEventCategory')
+  async getEventsByInstitutionAndCategory(@Param('idInstitution') idInstitution: number, @Param('idEventCategory') idEventCategory: number | null): Promise<Event[]> {
+    return this.service.getEventsByInstitutionAndCategory(idInstitution,idEventCategory);
+  }
+
   @Post()
   @FormDataRequest()
   async create(@Body() data): Promise<Event> {
