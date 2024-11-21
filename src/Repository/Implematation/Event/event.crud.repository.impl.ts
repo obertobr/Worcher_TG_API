@@ -25,11 +25,14 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
           .leftJoinAndSelect("event.eventCategory", "eventCategory")
           .leftJoinAndSelect("event.address", "address")
           .leftJoinAndSelect("event.image", "image")
-          .where("event.institution.id = :institutionId", { institutionId });
+          .where("event.institution.id = :institutionId", { institutionId })
+          .andWhere("event.dateTimeOfExecution >= :currentDateTime", { currentDateTime: new Date() });
       
         if (idCategory) {
           query.andWhere("event.eventCategory.id = :idCategory", { idCategory });
         }
+
+        query.addOrderBy("event.dateTimeOfExecution", "ASC");
       
         return query.getMany();
       }
