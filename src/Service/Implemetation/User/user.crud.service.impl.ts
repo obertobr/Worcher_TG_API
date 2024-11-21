@@ -126,7 +126,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         }
         if(entity.dateOfBirth == null){
             errorBuilder.addErrorMessage("Data de nascimento é nescessária")
-        } else if(!this.hasMinimumAge(entity.dateOfBirth, 12)){
+        } else if(!this.hasMinimumAge(entity.dateOfBirth, 10)){
             errorBuilder.addErrorMessage("Abaixo da idade minima")
         }
 
