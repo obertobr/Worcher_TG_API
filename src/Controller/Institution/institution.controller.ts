@@ -11,8 +11,6 @@ import MembershipRequestCrudServiceInterface, { requestEntryInterface } from 'sr
 @Controller("/institution")
 export class InstitutionController {
 
-
-  
   constructor(@Inject(InstitutionCrudServiceInterface) private readonly service: InstitutionCrudServiceInterface, 
               @Inject(DigitalFileCrudServiceInterface) private readonly digitalFileservice: DigitalFileCrudServiceInterface,
               @Inject(MembershipRequestCrudServiceInterface) private readonly membershipRequest: MembershipRequestCrudServiceInterface) {}
@@ -30,7 +28,12 @@ export class InstitutionController {
 
   @Get('/id/:id')
   async getById(@Param('id') id: number): Promise<Institution> {
-    return this.service.getById(id);
+    return this.service.getById(id, ["eventCategoryList"]);
+  }
+
+  @Get('/listByUser/:idUser')
+  async getListByUser(@Param('idUser') idUser: number): Promise<Institution[]> {
+    return this.service.getInstitutionsByUserId(idUser)
   }
 
   @Post()

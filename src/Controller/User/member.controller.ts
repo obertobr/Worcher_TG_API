@@ -51,4 +51,9 @@ export class MemberController {
     return  this.service.alterRole(id,role);
   }
 
+  @Get('/get-member-by-idInstitution-and-idUser/:idInstitution/:idUser')
+  async getMemberIdByInstitutionAndUser(@Param('idInstitution') idInstitution: number, @Param('idUser') idUser: number): Promise<number | null> {
+    return this.service.getMemberIdByInstitutionAndUser(idInstitution,idUser);
+  }
+
 }

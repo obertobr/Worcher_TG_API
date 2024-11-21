@@ -25,6 +25,22 @@ export class EventController {
     return this.service.getById(id);
   }
 
+  @Get('/getEventByInstitutionAndCategory/:idInstitution/:idEventCategory')
+  async getEventsByInstitutionAndCategory(@Param('idInstitution') idInstitution: number, @Param('idEventCategory') idEventCategory: number | null): Promise<Event[]> {
+    return this.service.getEventsByInstitutionAndCategory(idInstitution,idEventCategory);
+  }
+
+  @Get('/addMemberToEvent/:eventId/:memberId')
+  async addMemberToEvent(@Param('eventId') eventId: number, @Param('memberId') memberId: number): Promise<void> {
+    return this.service.addMemberToEvent(eventId,memberId);
+  }
+
+  @Get('/removeMemberFromEvent/:eventId/:memberId')
+  async removeMemberFromEvent(@Param('eventId') eventId: number, @Param('memberId') memberId: number): Promise<void> {
+    return this.service.removeMemberFromEvent(eventId,memberId);
+  }
+
+
   @Post()
   @FormDataRequest()
   async create(@Body() data): Promise<Event> {

@@ -148,7 +148,6 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
             errorBuilder.addErrorMessage("Conta é nescessária")
         }
 
-        console.log(entity)
         return errorBuilder;
     }
 

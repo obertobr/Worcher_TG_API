@@ -1,3 +1,4 @@
+import { Repository } from 'typeorm';
 import { Inject, Injectable } from "@nestjs/common";
 import BaseCrudService from "../base.crud.service";
 import ErrorBuilder from "src/Service/Validation/error.builder";
@@ -7,12 +8,14 @@ import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.
 import RoleCrudServiceInterface from "src/Service/Interface/Institution/role.crud.service.interface";
 import UserCrudServiceInterface from "src/Service/Interface/User/user.crud.service.interface";
 import Role from "src/Model/Institution/role.entity";
+import ValidationExcpection from 'src/Service/Validation/validation.exception';
 
 @Injectable()
 export default class MemberCrudServiceImpl extends BaseCrudService<Member> implements MemberCrudServiceInterface {   
     
     private serviceRole: RoleCrudServiceInterface;
     private serviceUser: UserCrudServiceInterface;
+    private repositoryMember: MemberCrudRepositoryInterface;
     
     constructor(@Inject(MemberCrudRepositoryInterface) repository: MemberCrudRepositoryInterface,
                 @Inject(RoleCrudServiceInterface) serviceRole: RoleCrudServiceInterface,
@@ -21,6 +24,7 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
         super(repository);
         this.serviceRole = serviceRole;
         this.serviceUser = serviceUser;
+        this.repositoryMember = repository
 
     }
    
@@ -45,5 +49,12 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
           const userRole =await this.getById(id,["user"])
           userRole.role = role 
           return await this.update(userRole)  
+    }
+
+    async getMemberIdByInstitutionAndUser(institutionId: number, userId: number): Promise<number | null>{
+        if(!institutionId || !userId)
+            throw new ValidationExcpection(["É nessário informar o id da instituição e do usuario"])
+
+        return this.repositoryMember.getMemberIdByInstitutionAndUser(institutionId,userId)
     }
 }
