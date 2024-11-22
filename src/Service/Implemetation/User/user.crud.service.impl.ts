@@ -48,7 +48,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
         if(!await bcrypt.compare(password, account.password)) throw new ValidationExcpection(['Senha incorreta!'],"Erro ao fazer login")
 
-        return account.user;
+        return await this.getById(account.user.id, ['image']);
     }
 
     private isValidCPF(cpf: string) {
@@ -105,7 +105,8 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
     }
 
     protected async beforeInsert(entity: User): Promise<void> {
-        entity.account.password = await bcrypt.hash(entity.account.password, 10);
+        if(entity.account)
+            entity.account.password = await bcrypt.hash(entity.account.password, 10);
     }
 
    async validate(entity: User): Promise<ErrorBuilder> {

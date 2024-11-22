@@ -6,6 +6,7 @@ import Account from 'src/Model/User/account.entity';
 import User from 'src/Model/User/user.entity';
 import DigitalFileCrudServiceInterface from 'src/Service/Interface/DigitalFile/digitalFile.crud.service.interface';
 import UserCrudServiceInterface from 'src/Service/Interface/User/user.crud.service.interface';
+import * as bcrypt from 'bcrypt';
 
 @Controller("/user")
 export class UserController {
@@ -81,7 +82,18 @@ export class UserController {
       const digitalFile = await this.digitalFileservice.save(image);
       user.image = digitalFile;
 
-      return await this.service.update(user)
+
+      const userUpdated = new User()
+      const userAssigned = Object.assign(userUpdated, {
+        id: user.id, 
+        name: user.name,
+        cpf: user.cpf, 
+        dateOfBirth: user.dateOfBirth,
+        image: user.image
+      })
+
+      console.log(userAssigned)
+      return await this.service.update(userAssigned)
     }
   }
 }
