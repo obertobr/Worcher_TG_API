@@ -4,6 +4,7 @@ import Config from "./config.entity";
 import Account from "./account.entity";
 import Member from "./member.entity";
 import MembershipRequest from "../Institution/membershipRequest.entity";
+import DigitalFile from "../DigitalFile/digitalFile.entity";
 
 @Entity()
 export default class User extends BaseEntity {
@@ -34,4 +35,8 @@ export default class User extends BaseEntity {
 
   @OneToMany(() => MembershipRequest, membershipRequest => membershipRequest.user, { cascade: true})
   membershipRequest: MembershipRequest[];
+
+  @OneToOne(() => DigitalFile, digitalFile => digitalFile.institution, {eager:true, onDelete: 'SET NULL'})
+  @JoinColumn()
+  image: DigitalFile;
 }

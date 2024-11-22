@@ -137,7 +137,7 @@ export default class DigitalFileCrudServiceImpl implements DigitalFileCrudServic
         try {
             await fs.unlink(filePath);
         } catch (err) {
-            throw new Error('Erro ao remover o arquivo: ' + err.message);
+            console.log(`erro ao deletar imagem: ${err}`)
         }
     }
 }
