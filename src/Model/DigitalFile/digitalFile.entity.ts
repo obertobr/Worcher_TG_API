@@ -2,6 +2,7 @@ import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import BaseEntity from "../baseEntity";
 import Institution from "../Institution/institution.entity";
 import Event from "../Event/event.entity";
+import User from "../User/user.entity";
 @Entity()
 export default class DigitalFile extends BaseEntity {
   
@@ -16,4 +17,7 @@ export default class DigitalFile extends BaseEntity {
   
   @OneToOne(() => Event, event => event.image)
   event: Event;
+
+  @OneToOne(() => User, user => user.image)
+  user: User;
 }
