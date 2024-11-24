@@ -7,4 +7,8 @@ export default abstract class EventCrudServiceInterface extends AbstractCrudServ
     abstract addMemberToEvent(eventId: number, memberId: number): Promise<void>
 
     abstract removeMemberFromEvent(eventId: number, memberId: number): Promise<void>
+
+    abstract removeMemberFromEventByUser(eventId: number, userId: number): Promise<void>
+
+    abstract getEventsByUser(userId: number): Promise<Event[]>
 }

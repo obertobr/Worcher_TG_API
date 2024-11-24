@@ -20,8 +20,6 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
         this.serviceMember = _serviceMember;
         this.repositoryEvent = repository
     }
-    
-    
 
     protected beforeSave(entity: Event): void {
         entity.creationDateTime = new Date();
@@ -111,6 +109,36 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
       
         await this.repositoryEvent.save(event);
       }
+
+      async removeMemberFromEventByUser(eventId: number, userId: number): Promise<void> {
+        const event = await this.repositoryEvent.getEventWithRegisteredMemberList(eventId);
+      
+        if (!event) {
+          throw new ValidationExcpection([`Event with id ${eventId} not found`]);
+        }
+      
+        const member = event.registeredMemberList.find(
+          (member) => member.user.id === userId
+        );
+      
+        if (!member) {
+          throw new Error(`User with id ${userId} is not registered in the event`);
+        }
+      
+        event.registeredMemberList = event.registeredMemberList.filter(
+          (registeredMember) => registeredMember.id !== member.id
+        );
+      
+        await this.repositoryEvent.save(event);
+      }
+      
       
     
+      getEventsByUser(userId: number): Promise<Event[]>{
+        if(!userId)
+          throw new Error("Não foi informado o id do usuario!");
+
+        return this.repositoryEvent.getEventsByUser(userId);
+      }
+      
 }

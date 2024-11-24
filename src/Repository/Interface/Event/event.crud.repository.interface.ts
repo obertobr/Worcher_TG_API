@@ -7,4 +7,6 @@ export default abstract class EventCrudRepositoryInterface extends AbstractCrudR
 
     abstract getEventWithRegisteredMemberList(eventId: number): Promise<Event>;
 
+    abstract getEventsByUser(userId: number): Promise<Event[]>
+
 }

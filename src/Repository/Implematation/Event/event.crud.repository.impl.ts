@@ -20,7 +20,9 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
         const query = this.repository
           .createQueryBuilder("event")
           .leftJoinAndSelect("event.member", "member")
+          .leftJoinAndSelect("member.user", "creatorUser")
           .leftJoinAndSelect("event.registeredMemberList", "registeredMemberList")
+          .leftJoinAndSelect("registeredMemberList.user", "participantUser")
           .leftJoinAndSelect("event.institution", "institution")
           .leftJoinAndSelect("event.eventCategory", "eventCategory")
           .leftJoinAndSelect("event.address", "address")
@@ -43,5 +45,29 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
             relations: ['registeredMemberList'],
           });
       }
+
+      async getEventsByUser(userId: number): Promise<Event[]> {
+        const query = this.repository
+          .createQueryBuilder("event")
+          .leftJoinAndSelect("event.member", "member")
+          .leftJoinAndSelect("event.registeredMemberList", "registeredMemberList")
+          .leftJoinAndSelect("member.user", "creatorUser")
+          .leftJoinAndSelect("registeredMemberList.user", "participantUser")
+          .leftJoinAndSelect("event.institution", "institution")
+          .leftJoinAndSelect("event.eventCategory", "eventCategory")
+          .leftJoinAndSelect("event.address", "address")
+          .leftJoinAndSelect("event.image", "image")
+          .where(
+            "creatorUser.id = :userId OR participantUser.id = :userId",
+            { userId }
+          )
+          .andWhere("event.dateTimeOfExecution >= :currentDateTime", { currentDateTime: new Date() });
+      
+        query.addOrderBy("event.dateTimeOfExecution", "ASC");
+      
+        return query.getMany();
+      }
+      
+      
 
 }

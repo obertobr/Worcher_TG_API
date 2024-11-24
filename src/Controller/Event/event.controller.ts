@@ -40,6 +40,10 @@ export class EventController {
     return this.service.removeMemberFromEvent(eventId,memberId);
   }
 
+  @Get('/removeMemberFromEventByUserId/:eventId/:userId')
+  async removeMemberFromEventByUserId(@Param('eventId') eventId: number, @Param('userId') userId: number): Promise<void> {
+    return this.service.removeMemberFromEventByUser(eventId,userId);
+  }
 
   @Post()
   @FormDataRequest()
@@ -85,6 +89,11 @@ export class EventController {
     const result = await this.service.delete(id)
     await this.digitalFileservice.delete(imageId)
     return result
+  }
+
+  @Get('/eventsByIdUser/:userId')
+  getEventsByUser(@Param('userId') userId: number): Promise<Event[]>{
+    return this.service.getEventsByUser(userId);
   }
   
 }
