@@ -25,6 +25,7 @@ export default class InstitutionCrudRepositoryImpl extends BaseCrudRepository<In
             .createQueryBuilder('institution')
             .leftJoinAndSelect('institution.memberList', 'member')
             .leftJoinAndSelect('member.user', 'user')
+            .leftJoinAndSelect('institution.image', 'image')
             .where('user.id = :userId', { userId })
             .getMany();
     }
