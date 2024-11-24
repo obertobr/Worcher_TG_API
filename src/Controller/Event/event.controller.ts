@@ -22,7 +22,7 @@ export class EventController {
 
   @Get('/id/:id')
   async getById(@Param('id') id: number): Promise<Event> {
-    return this.service.getById(id, ["member","registeredMemberList","institution","eventCategory"]);
+    return this.service.getById(id, ["member","registeredMemberList","institution","eventCategory","address","address.city.state"]);
   }
 
   @Get('/getEventByInstitutionAndCategory/:idInstitution/:idEventCategory')
