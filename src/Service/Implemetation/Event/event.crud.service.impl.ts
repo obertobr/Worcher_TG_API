@@ -54,6 +54,14 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
             errorBuilder.addErrorMessage(" A categoria do evento deve ser informada!")
         }
 
+        if(entity.address == null){
+          errorBuilder.addErrorMessage("O endereço deve ser informado!")
+        }else{
+          if(!entity.address.city){
+            errorBuilder.addErrorMessage("A cidade deve ser informada!")
+          }
+        }
+
         return errorBuilder;
     }
     getEventsByInstitutionAndCategory(institutionId: number, idCategory?: number | null, removeEventsWithDateBeforeDateNow: boolean = true): Promise<Event[]> {
