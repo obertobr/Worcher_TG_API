@@ -56,11 +56,10 @@ export default class EventCrudServiceImpl extends BaseCrudService<Event> impleme
 
         return errorBuilder;
     }
-
-    getEventsByInstitutionAndCategory(institutionId: number, idCategory?: number | null): Promise<Event[]> {
+    getEventsByInstitutionAndCategory(institutionId: number, idCategory?: number | null, removeEventsWithDateBeforeDateNow: boolean = true): Promise<Event[]> {
         if(!institutionId) throw new ValidationExcpection(["O id da instituição não foi informado!"])
 
-            return this.repositoryEvent.getEventsByInstitutionAndCategory(institutionId,idCategory)
+            return this.repositoryEvent.getEventsByInstitutionAndCategory(institutionId,idCategory,removeEventsWithDateBeforeDateNow)
     }
 
     async addMemberToEvent(eventId: number, memberId: number): Promise<void> {

@@ -25,9 +25,9 @@ export class EventController {
     return this.service.getById(id, ["member","registeredMemberList","institution","eventCategory","address","address.city.state"]);
   }
 
-  @Get('/getEventByInstitutionAndCategory/:idInstitution/:idEventCategory')
-  async getEventsByInstitutionAndCategory(@Param('idInstitution') idInstitution: number, @Param('idEventCategory') idEventCategory: number | null): Promise<Event[]> {
-    return this.service.getEventsByInstitutionAndCategory(idInstitution,idEventCategory);
+  @Get('/getEventByInstitutionAndCategory/:idInstitution/:idEventCategory/:removeEventsWithDateBeforeDateNow')
+  async getEventsByInstitutionAndCategory(@Param('idInstitution') idInstitution: number, @Param('idEventCategory') idEventCategory: number | null, @Param('removeEventsWithDateBeforeDateNow') removeEventsWithDateBeforeDateNow: boolean): Promise<Event[]> {
+    return this.service.getEventsByInstitutionAndCategory(idInstitution,idEventCategory,removeEventsWithDateBeforeDateNow);
   }
 
   @Get('/addMemberToEvent/:eventId/:memberId')

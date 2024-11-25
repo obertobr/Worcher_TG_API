@@ -14,7 +14,8 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
 
     async getEventsByInstitutionAndCategory(
         institutionId: number,
-        idCategory?: number | null
+        idCategory?: number | null,
+        removeEventsWithDateBeforeDateNow: boolean = true
       ): Promise<Event[]> {
 
         const query = this.repository
@@ -28,7 +29,10 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
           .leftJoinAndSelect("event.address", "address")
           .leftJoinAndSelect("event.image", "image")
           .where("event.institution.id = :institutionId", { institutionId })
-          .andWhere("event.dateTimeOfExecution >= :currentDateTime", { currentDateTime: new Date() });
+
+        if(removeEventsWithDateBeforeDateNow){
+          query.andWhere("event.dateTimeOfExecution >= :currentDateTime", { currentDateTime: new Date() });
+        }
       
         if (idCategory) {
           query.andWhere("event.eventCategory.id = :idCategory", { idCategory });
