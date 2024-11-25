@@ -14,19 +14,25 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
 
     async getEventsByInstitutionAndCategory(
         institutionId: number,
-        idCategory?: number | null
+        idCategory?: number | null,
+        removeEventsWithDateBeforeDateNow: boolean = true
       ): Promise<Event[]> {
 
         const query = this.repository
           .createQueryBuilder("event")
           .leftJoinAndSelect("event.member", "member")
+          .leftJoinAndSelect("member.user", "creatorUser")
           .leftJoinAndSelect("event.registeredMemberList", "registeredMemberList")
+          .leftJoinAndSelect("registeredMemberList.user", "participantUser")
           .leftJoinAndSelect("event.institution", "institution")
           .leftJoinAndSelect("event.eventCategory", "eventCategory")
           .leftJoinAndSelect("event.address", "address")
           .leftJoinAndSelect("event.image", "image")
           .where("event.institution.id = :institutionId", { institutionId })
-          .andWhere("event.dateTimeOfExecution >= :currentDateTime", { currentDateTime: new Date() });
+
+        if(removeEventsWithDateBeforeDateNow){
+          query.andWhere("event.dateTimeOfExecution >= :currentDateTime", { currentDateTime: new Date() });
+        }
       
         if (idCategory) {
           query.andWhere("event.eventCategory.id = :idCategory", { idCategory });
@@ -43,5 +49,29 @@ export default class EventCrudRepositoryImpl extends BaseCrudRepository<Event> i
             relations: ['registeredMemberList'],
           });
       }
+
+      async getEventsByUser(userId: number): Promise<Event[]> {
+        const query = this.repository
+          .createQueryBuilder("event")
+          .leftJoinAndSelect("event.member", "member")
+          .leftJoinAndSelect("event.registeredMemberList", "registeredMemberList")
+          .leftJoinAndSelect("member.user", "creatorUser")
+          .leftJoinAndSelect("registeredMemberList.user", "participantUser")
+          .leftJoinAndSelect("event.institution", "institution")
+          .leftJoinAndSelect("event.eventCategory", "eventCategory")
+          .leftJoinAndSelect("event.address", "address")
+          .leftJoinAndSelect("event.image", "image")
+          .where(
+            "creatorUser.id = :userId OR participantUser.id = :userId",
+            { userId }
+          )
+          .andWhere("event.dateTimeOfExecution >= :currentDateTime", { currentDateTime: new Date() });
+      
+        query.addOrderBy("event.dateTimeOfExecution", "ASC");
+      
+        return query.getMany();
+      }
+      
+      
 
 }

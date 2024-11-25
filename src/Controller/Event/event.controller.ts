@@ -22,12 +22,12 @@ export class EventController {
 
   @Get('/id/:id')
   async getById(@Param('id') id: number): Promise<Event> {
-    return this.service.getById(id, ["member","registeredMemberList","institution","eventCategory"]);
+    return this.service.getById(id, ["member","registeredMemberList","institution","eventCategory","address","address.city.state"]);
   }
 
-  @Get('/getEventByInstitutionAndCategory/:idInstitution/:idEventCategory')
-  async getEventsByInstitutionAndCategory(@Param('idInstitution') idInstitution: number, @Param('idEventCategory') idEventCategory: number | null): Promise<Event[]> {
-    return this.service.getEventsByInstitutionAndCategory(idInstitution,idEventCategory);
+  @Get('/getEventByInstitutionAndCategory/:idInstitution/:idEventCategory/:removeEventsWithDateBeforeDateNow')
+  async getEventsByInstitutionAndCategory(@Param('idInstitution') idInstitution: number, @Param('idEventCategory') idEventCategory: number | null, @Param('removeEventsWithDateBeforeDateNow') removeEventsWithDateBeforeDateNow: boolean): Promise<Event[]> {
+    return this.service.getEventsByInstitutionAndCategory(idInstitution,idEventCategory,removeEventsWithDateBeforeDateNow);
   }
 
   @Get('/addMemberToEvent/:eventId/:memberId')
@@ -40,6 +40,10 @@ export class EventController {
     return this.service.removeMemberFromEvent(eventId,memberId);
   }
 
+  @Get('/removeMemberFromEventByUserId/:eventId/:userId')
+  async removeMemberFromEventByUserId(@Param('eventId') eventId: number, @Param('userId') userId: number): Promise<void> {
+    return this.service.removeMemberFromEventByUser(eventId,userId);
+  }
 
   @Post()
   @FormDataRequest()
@@ -85,6 +89,11 @@ export class EventController {
     const result = await this.service.delete(id)
     await this.digitalFileservice.delete(imageId)
     return result
+  }
+
+  @Get('/eventsByIdUser/:userId')
+  getEventsByUser(@Param('userId') userId: number): Promise<Event[]>{
+    return this.service.getEventsByUser(userId);
   }
   
 }

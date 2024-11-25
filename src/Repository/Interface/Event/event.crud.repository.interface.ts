@@ -3,8 +3,10 @@ import AbstractCrudRepositoryInterface from "../abstract.crud.repository.interfa
 
 export default abstract class EventCrudRepositoryInterface extends AbstractCrudRepositoryInterface<Event> {
 
-    abstract getEventsByInstitutionAndCategory(institutionId: number,idCategory?: number | null): Promise<Event[]>
+    abstract getEventsByInstitutionAndCategory(institutionId: number,idCategory?: number | null, removeEventsWithDateBeforeDateNow?: boolean): Promise<Event[]>
 
     abstract getEventWithRegisteredMemberList(eventId: number): Promise<Event>;
+
+    abstract getEventsByUser(userId: number): Promise<Event[]>
 
 }
