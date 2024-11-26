@@ -4,6 +4,7 @@ import ErrorBuilder from "src/Service/Validation/error.builder";
 import EventCategory from "src/Model/Event/event.category.entity";
 import EventCategoryCrudServiceInterface from "src/Service/Interface/Event/event.category.crud.service.interface";
 import EventCategoryCrudRepositoryInterface from "src/Repository/Interface/Event/event.category.crud.repository.interface";
+import ValidationExcpection from "src/Service/Validation/validation.exception";
 
 @Injectable()
 export default class EventCategoryCrudServiceImpl extends BaseCrudService<EventCategory> implements EventCategoryCrudServiceInterface {
@@ -22,6 +23,20 @@ export default class EventCategoryCrudServiceImpl extends BaseCrudService<EventC
         }
 
         return errorBuilder;
+    }
+
+    async delete(id: number): Promise<void> {
+    
+        const entity = await this.repository.getById(id, ["eventList"])
+        
+        if (!entity) {
+            throw new ValidationExcpection([`Entidade com o ID: ${id} não encontrada ou já deletada`],'Erro ao deletar cargo');
+        }
+        if(entity.eventList.length != 0){
+            throw new ValidationExcpection([`Existem eventos utilizando esta categoria`],'Erro ao deletar categoria de evento');
+        }
+        
+        await this.repository.delete(id);
     }
    
 
