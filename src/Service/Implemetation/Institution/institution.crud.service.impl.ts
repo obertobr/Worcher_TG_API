@@ -115,9 +115,10 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         }
         const memberList = (await this.getById(id)).memberList;
         
-        const searchedMembers = memberList.filter(member => 
-            member.user.name.includes(search)
-        );
+        const searchedMembers = memberList.filter(member => {
+            const nameMemberUpperCase = member.user.name.toUpperCase()
+            return nameMemberUpperCase.includes(search.toUpperCase())
+        });
     
         return searchedMembers;
     }
