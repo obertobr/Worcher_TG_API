@@ -4,4 +4,6 @@ import AbstractCrudRepositoryInterface from "../abstract.crud.repository.interfa
 export default abstract class MemberCrudRepositoryInterface extends AbstractCrudRepositoryInterface<Member> {
 
     abstract getMemberIdByInstitutionAndUser( institutionId: number, userId: number): Promise<number | null>
+
+    abstract deleteMemberEvents(memberId: number): Promise<void>
 }

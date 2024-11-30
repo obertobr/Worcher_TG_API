@@ -20,7 +20,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
 
     protected afterUpdate(entity: T): void {}
 
-    protected beforeRemove(entity: T): void { }
+    protected beforeRemove(): void { }
 
     protected afterRemove(entity: T): void { }
 
@@ -78,6 +78,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     }
 
     async delete(id: number): Promise<void> {
+        this.beforeRemove()
     
         const entity = await this.repository.getById(id)
         

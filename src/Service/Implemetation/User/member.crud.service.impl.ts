@@ -57,4 +57,9 @@ export default class MemberCrudServiceImpl extends BaseCrudService<Member> imple
 
         return this.repositoryMember.getMemberIdByInstitutionAndUser(institutionId,userId)
     }
+
+    async delete(id: number): Promise<void> {
+        await this.repositoryMember.deleteMemberEvents(id)
+        return super.delete(id)
+    }
 }

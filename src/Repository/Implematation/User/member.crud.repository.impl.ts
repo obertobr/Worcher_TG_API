@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
 import Member from "src/Model/User/member.entity";
+import Event from "src/Model/Event/event.entity";
 
 @Injectable()
 export default class MemberCrudRepositoryImpl extends BaseCrudRepository<Member> implements MemberCrudRepositoryInterface {
@@ -25,6 +26,29 @@ export default class MemberCrudRepositoryImpl extends BaseCrudRepository<Member>
       
         return result ? result.id : null;
       }
+
+      async deleteMemberEvents(memberId: number): Promise<void> {
+        await this.repository
+            .createQueryBuilder()
+            .delete()
+            .from(Event)
+            .where('member.id = :memberId', { memberId })
+            .execute();
+    
+        await this.repository
+            .createQueryBuilder()
+            .relation(Member, 'particepatedEventList')
+            .of(memberId)
+            .remove(await this.getParticipatedEvents(memberId));
+    }
       
+    private async getParticipatedEvents(memberId: number): Promise<Event[]> {
+      const member = await this.repository.findOne({
+          where: { id: memberId },
+          relations: ['particepatedEventList'],
+      });
+  
+      return member ? member.particepatedEventList : [];
+  }
 
 }
