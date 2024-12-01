@@ -4,6 +4,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import Institution from "src/Model/Institution/institution.entity";
 import InstitutionCrudRepositoryInterface from "src/Repository/Interface/Institution/institution.crud.repository.interface";
+import Role from "src/Model/Institution/role.entity";
+import Member from "src/Model/User/member.entity";
+import Event from "src/Model/Event/event.entity";
+import EventCategory from "src/Model/Event/event.category.entity";
 
 @Injectable()
 export default class InstitutionCrudRepositoryImpl extends BaseCrudRepository<Institution> implements InstitutionCrudRepositoryInterface {
@@ -28,6 +32,37 @@ export default class InstitutionCrudRepositoryImpl extends BaseCrudRepository<In
             .leftJoinAndSelect('institution.image', 'image')
             .where('user.id = :userId', { userId })
             .getMany();
+    }
+
+    async deleteAfterInstitution(institutionId: number): Promise<void> {
+        await this.repository
+            .createQueryBuilder()
+            .delete()
+            .from(Event)
+            .where('institution.id = :institutionId', { institutionId })
+            .execute();
+
+        await this.repository
+            .createQueryBuilder()
+            .delete()
+            .from(EventCategory)
+            .where('institution.id = :institutionId', { institutionId })
+            .execute();
+
+        await this.repository
+            .createQueryBuilder()
+            .delete()
+            .from(Member)
+            .where('institution.id = :institutionId', { institutionId })
+            .execute();
+
+        await this.repository
+            .createQueryBuilder()
+            .delete()
+            .from(Role)
+            .where('institution.id = :institutionId', { institutionId })
+            .execute();
+    
     }
     
 

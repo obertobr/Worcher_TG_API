@@ -128,5 +128,10 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
 
         return listInstitutions
     }
+
+    async delete(id: number): Promise<void> {
+        await this.repository.deleteAfterInstitution(id);
+        await super.delete(id)
+    }
    
 }

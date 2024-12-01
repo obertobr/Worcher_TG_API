@@ -6,4 +6,6 @@ export default abstract class InstitutionCrudRepositoryInterface extends Abstrac
     abstract getInstitutionByCode(code: number): Promise<Institution>
 
     abstract getInstitutionsByUserId(userId: number): Promise<Institution[]>
+
+    abstract deleteAfterInstitution(institutionId: number): Promise<void>
 }
