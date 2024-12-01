@@ -26,6 +26,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
     private accountService: AccountCrudServiceInterface
     private serviceRecovery: RecoveryCrudServiceInterface
     private repositoryAccount: AccountCrudRepositoryInterface
+    private repositoryUser: UserCrudRepositoryInterface
 
     private emailService = new EmailService()
     constructor(@Inject(UserCrudRepositoryInterface) repository: UserCrudRepositoryInterface,
@@ -35,6 +36,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
                 @Inject(RecoveryCrudServiceInterface) serviceRecovery: RecoveryCrudServiceInterface,
     ) {
         super(repository);
+        this.repositoryUser = repository
         this.configService = configService;
         this.accountService = accountService;
         this.repositoryAccount = repositoryAccount;
@@ -222,6 +224,11 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
         }
         return false
+    }
+
+    async delete(id: number): Promise<void> {
+        await this.repositoryUser.deleteBeforeUser(id);
+        await super.delete(id)
     }
 
 }

@@ -5,4 +5,6 @@ export default abstract class UserCrudRepositoryInterface extends AbstractCrudRe
 
     abstract findByCpf(cpf:string):Promise<User>
 
+    abstract deleteBeforeUser(userId: number): Promise<void>
+
 }
