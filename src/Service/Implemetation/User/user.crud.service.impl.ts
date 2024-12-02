@@ -130,7 +130,7 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
         if(entity.dateOfBirth == null){
             errorBuilder.addErrorMessage("Data de nascimento é nescessária")
         } else if(!this.hasMinimumAge(entity.dateOfBirth, 10)){
-            errorBuilder.addErrorMessage("Abaixo da idade minima")
+            errorBuilder.addErrorMessage("Não é possivel criar uma conta sendo menor de 10 anos")
         }
 
         if(entity.config != null) {
