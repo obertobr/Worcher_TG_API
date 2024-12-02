@@ -32,7 +32,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     abstract validate(entity: T): Promise<ErrorBuilder>
 
     async save(entity: T): Promise<T> {
-        this.beforeSave(entity)
+        await this.beforeSave(entity)
 
         const errorBuilder = await this.validate(entity);
         if (!errorBuilder.hasErrors()) {
@@ -47,7 +47,7 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
     }
 
     async saveAll(entities: T[]): Promise<T[]> {
-        entities.forEach(async entity => {
+        await entities.forEach(async entity => {
             this.beforeSave(entity)
             const errorBuilder = await this.validate(entity)
             if (errorBuilder.hasErrors()) {

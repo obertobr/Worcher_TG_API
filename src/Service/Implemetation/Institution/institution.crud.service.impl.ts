@@ -29,8 +29,17 @@ export default class InstitutionCrudServiceImpl extends BaseCrudService<Institut
         this.membershipRequestService = membershipRequestService;
     }
 
-    protected beforeSave(entity: Institution): void {
-        entity.code = Math.floor(100000 + Math.random() * 900000).toString();
+    protected async beforeSave(entity: Institution): Promise<void> {
+        let code = 0
+        while(1){
+            code = Math.floor(100000 + Math.random() * 900000);
+            const institution = await this.repository.getInstitutionByCode(code);
+
+            if(!institution){
+                break
+            }
+        }
+        entity.code = code.toString()
     }
 
     async validate(entity: Institution): Promise<ErrorBuilder> {
