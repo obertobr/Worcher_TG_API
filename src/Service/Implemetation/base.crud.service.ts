@@ -64,17 +64,24 @@ export default abstract class BaseCrudService<T> implements AbstractCrudServiceI
 
     async update(entity: T): Promise<T> {
         this.beforeUpdate(entity);
-        await this.beforeInsert(entity)
 
-        const entityUpdated = await this.repository.update(entity['id'], entity);
+        const errorBuilder = await this.validate(entity)
+
+        if (!errorBuilder.hasErrors()) {
+            await this.beforeInsert(entity)
+
+            const entityUpdated = await this.repository.update(entity['id'], entity);
         
-        if (!entityUpdated) {
-            throw new ValidationExcpection([`Entidade com o ID: ${entity['id']} não encontrada`],'Erro ao atualizar objeto');
+            if (!entityUpdated) {
+                throw new ValidationExcpection([`Entidade com o ID: ${entity['id']} não encontrada`],'Erro ao atualizar objeto');
+            }
+            
+            this.afterUpdate(entityUpdated);
+            
+            return entity;
+        }else{
+            errorBuilder.toThrowErrors()
         }
-        
-        this.afterUpdate(entityUpdated);
-        
-        return entity;
     }
 
     async delete(id: number): Promise<void> {
