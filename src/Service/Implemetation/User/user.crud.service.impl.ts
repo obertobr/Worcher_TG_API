@@ -228,7 +228,26 @@ export default class UserCrudServiceImpl extends BaseCrudService<User> implement
 
     async delete(id: number): Promise<void> {
         await this.repositoryUser.deleteBeforeUser(id);
-        await super.delete(id)
+        const user = await this.repositoryUser.getById(id)
+        await super.delete(id);
+        await this.repositoryUser.deleteAfterUser(user.account.id,user.config.id);
+    }
+
+    async update(entity: User): Promise<User> {
+            this.beforeUpdate(entity);
+    
+                await this.beforeInsert(entity)
+    
+                const entityUpdated = await this.repository.update(entity['id'], entity);
+            
+                if (!entityUpdated) {
+                    throw new ValidationExcpection([`Entidade com o ID: ${entity['id']} não encontrada`],'Erro ao atualizar objeto');
+                }
+                
+                this.afterUpdate(entityUpdated);
+                
+                return entity;
+            
     }
 
 }

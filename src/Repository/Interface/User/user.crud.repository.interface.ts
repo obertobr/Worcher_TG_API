@@ -7,4 +7,6 @@ export default abstract class UserCrudRepositoryInterface extends AbstractCrudRe
 
     abstract deleteBeforeUser(userId: number): Promise<void>
 
+    abstract deleteAfterUser(accountId: number, configId: number): Promise<void>
+
 }

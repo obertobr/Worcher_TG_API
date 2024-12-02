@@ -8,12 +8,18 @@ import Account from "src/Model/User/account.entity";
 import Config from "src/Model/User/config.entity";
 import Member from "src/Model/User/member.entity";
 import Event from "src/Model/Event/event.entity";
+import MemberCrudRepositoryInterface from "src/Repository/Interface/User/member.crud.repository.interface";
 
 @Injectable()
 export default class UserCrudRepositoryImpl extends BaseCrudRepository<User> implements UserCrudRepositoryInterface {
     
-    constructor(@InjectRepository(User) readonly repository: Repository<User>){
+    private _repositoryMember: Repository<Member>;
+
+    constructor(@InjectRepository(User) readonly repository: Repository<User>,
+                @InjectRepository(Member) readonly repositoryMember: Repository<Member>,
+    ){
         super(repository)
+        this._repositoryMember = repositoryMember
     }
     async findByCpf(cpf:string){
         return this.repository.createQueryBuilder('user')
@@ -21,9 +27,37 @@ export default class UserCrudRepositoryImpl extends BaseCrudRepository<User> imp
         .getOne();
     } 
 
+    async deleteMemberEvents(memberId: number): Promise<void> {
+        await this._repositoryMember
+            .createQueryBuilder()
+            .delete()
+            .from(Event)
+            .where('member.id = :memberId', { memberId })
+            .execute();
+    
+
+            console.log("Deletando event_registerd_member_list com ID do membro: " + memberId)
+        const query = ` delete from event_registered_member_list_member where memberId = ${memberId} ` 
+        await this.repository.query(query)
+
+        // await this._repositoryMember
+        //     .createQueryBuilder()
+        //     .relation(Member, 'particepatedEventList')
+        //     .of(memberId)
+        //     .remove(await this.getParticipatedEvents(memberId));
+    }
+      
+    private async getParticipatedEvents(memberId: number): Promise<Event[]> {
+      const member = await this._repositoryMember.findOne({
+          where: { id: memberId },
+          relations: ['particepatedEventList'],
+      });
+  
+      return member ? member.particepatedEventList : [];
+  }
+
     async deleteBeforeUser(userId: number): Promise<void> {
         // Obter IDs de membros associados ao userId
-        console.log("USER ID: " + userId)
 
         const memberIds = (await this.repository
             .createQueryBuilder()
@@ -32,54 +66,30 @@ export default class UserCrudRepositoryImpl extends BaseCrudRepository<User> imp
             .where('member.userId = :userId', { userId })
             .getRawMany())
             .map(member => { 
-                console.log(member)
                 return member['id']
             });
-    
-        // Obter IDs de eventos relacionados aos membros
-        // const eventIds = (await this.repository
-        //     .createQueryBuilder()
-        //     .select('DISTINCT event.id')
-        //     .from(Event, 'event')
-        //     .innerJoin('event.registeredMemberList', 'member')
-        //     .where('member.id IN (:...memberIds)', { memberIds })
-        //     .getRawMany()).map(event => event['id']);
 
-            console.log(memberIds)
-            // console.log(eventIds)
-    
-        // Remover relação ManyToMany entre eventos e membros
-        // if (eventIds.length && memberIds.length) {
-        //     await this.repository
-        //         .createQueryBuilder()
-        //         .relation(Event, 'registeredMemberList')
-        //         .of(eventIds) // IDs dos eventos
-        //         .remove(memberIds); // IDs dos membros
-        // }
-    
-        // Excluir eventos criados pelos membros associados ao userId
-        // await this.repository
-        //     .createQueryBuilder()
-        //     .delete()
-        //     .from(Event)
-        //     .where('member.id IN (:...memberIds)', { memberIds })
-        //     .execute();
-    
-        // Excluir membros associados ao userId
+        for(let i = 0; i < memberIds.length; i++){
+            const memberId = memberIds[i]
+            if(memberId != null && memberId != undefined){
+                console.log(memberId)
+                await this.deleteMemberEvents(memberId)
+            }
+        }
 
+        console.log("Deletando member com id de USER: " + userId)
         const query = ` DELETE FROM member WHERE userId = ${userId} `
-        console.log(query)
-        // await this.repository.query(query);
+        await this.repository.query(query);
 
-        const queryRemoveAccount = `DELETE FROM account WHERE account.id in (SELECT accountId from user where user.id = ${userId} )`
-        console.log(queryRemoveAccount)
-        // await this.repository.query(queryRemoveAccount)
-
-        // const queryRemoveConfig = `DELETE FROM config WHERE id in (SELECT configId from user where user.id = ${userId} )`
-        // await this.repository.query(queryRemoveConfig)
-        
     }
     
+    async deleteAfterUser(accountId: number, configId: number): Promise<void> {
+        const queryRemoveAccount = `DELETE FROM account WHERE account.id = ${accountId} `
+        await this.repository.query(queryRemoveAccount)
+
+        const queryRemoveConfig = `DELETE FROM config WHERE id = ${configId} `
+        await this.repository.query(queryRemoveConfig)
+    }
     
     
     

@@ -82,6 +82,8 @@ export class UserController {
       const digitalFile = await this.digitalFileservice.save(image);
       user.image = digitalFile;
 
+      console.log(user)
+
       const userUpdated = new User()
       const userAssigned = Object.assign(userUpdated, {
         id: user.id, 
